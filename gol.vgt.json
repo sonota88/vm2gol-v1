@@ -20,16 +20,6 @@
   ]
 
  ,["func"
-   ,"arr_set"
-   ,["w", "x", "y", "v"]
-   ,[
-      ["var", "ai"] // array index
-     ,["call_set", "ai", ["to_ai", "w", "x", "y", 0]]
-     ,["set", "arr[ai]", "v"]
-    ]
-  ]
-
- ,["func"
    ,"arr_get_v2"
    ,["w", "h", "x", "y"]
    ,[
@@ -267,9 +257,6 @@
      ,["set", "h", 5]
 
      // 配列の初期化 5x5, ブリンカー / x, y, val
-     // ,["call", "arr_set", "w", 2, 1, 1]
-     // ,["call", "arr_set", "w", 2, 2, 1]
-     // ,["call", "arr_set", "w", 2, 3, 1]
      // ,["set", "arr[7]", 1]
      // ,["set", "arr[12]", 1]
      // ,["set", "arr[17]", 1]
