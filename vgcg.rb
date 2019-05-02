@@ -147,7 +147,7 @@ def proc_while(rest, fn_names, lvar_names, fn_args)
   codes << "label while_#{label_id}"
   codes.concat render_exp(cond_exp, lvar_names, fn_args)
   codes << "set_reg_b 1"
-  codes << "compare"
+  codes << "compare_v2"
   codes << "jump_eq true_#{label_id}"
   # false の場合ループを抜ける
   codes << "jump end_while_#{label_id}"
