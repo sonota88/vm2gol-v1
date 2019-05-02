@@ -561,7 +561,7 @@
 - end_neq_10
 - set_reg_b
 - 1
-- compare
+- compare_v2
 - jump_eq
 - 569
 - jump
@@ -596,7 +596,7 @@
 - end_neq_12
 - set_reg_b
 - 1
-- compare
+- compare_v2
 - jump_eq
 - 604
 - jump
@@ -728,7 +728,7 @@
 - end_neq_14
 - set_reg_b
 - 1
-- compare
+- compare_v2
 - jump_eq
 - 736
 - jump
@@ -1563,7 +1563,7 @@
 - end_neq_23
 - set_reg_b
 - 1
-- compare
+- compare_v2
 - jump_eq
 - 1571
 - jump
@@ -1599,7 +1599,7 @@
 - end_neq_25
 - set_reg_b
 - 1
-- compare
+- compare_v2
 - jump_eq
 - 1607
 - jump
@@ -1726,7 +1726,7 @@
 - end_eq_27
 - set_reg_b
 - 1
-- compare
+- compare_v2
 - jump_eq
 - 1734
 - jump

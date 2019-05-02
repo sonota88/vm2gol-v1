@@ -260,7 +260,7 @@
 - set_reg_a 0
 - label end_neq_10
 - set_reg_b 1
-- compare
+- compare_v2
 - jump_eq true_9
 - jump end_while_9
 - label true_9
@@ -278,7 +278,7 @@
 - set_reg_a 0
 - label end_neq_12
 - set_reg_b 1
-- compare
+- compare_v2
 - jump_eq true_11
 - jump end_while_11
 - label true_11
@@ -339,7 +339,7 @@
 - set_reg_a 0
 - label end_neq_14
 - set_reg_b 1
-- compare
+- compare_v2
 - jump_eq true_13
 - jump end_while_13
 - label true_13
@@ -720,7 +720,7 @@
 - set_reg_a 0
 - label end_neq_23
 - set_reg_b 1
-- compare
+- compare_v2
 - jump_eq true_22
 - jump end_while_22
 - label true_22
@@ -738,7 +738,7 @@
 - set_reg_a 0
 - label end_neq_25
 - set_reg_b 1
-- compare
+- compare_v2
 - jump_eq true_24
 - jump end_while_24
 - label true_24
@@ -795,7 +795,7 @@
 - set_reg_a 1
 - label end_eq_27
 - set_reg_b 1
-- compare
+- compare_v2
 - jump_eq true_26
 - jump end_while_26
 - label true_26
