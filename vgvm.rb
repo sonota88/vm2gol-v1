@@ -287,12 +287,6 @@ class Cpu
       when "cp"
         copy
         @ip += 3
-      when "add_ab" # deprecated
-        warn "add_ab is deprecated"
-        assert_num(@reg_a)
-        assert_num(@reg_b)
-        @reg_c = @reg_a.to_i + @reg_b.to_i
-        @ip += 1
       when "add_ab_v2"
         assert_num(@reg_a)
         assert_num(@reg_b)
