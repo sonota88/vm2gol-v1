@@ -4,7 +4,7 @@ set -o errexit
 
 clike_file="$1"
 bname=$(basename $clike_file .vgt.json)
-asm_file="${bname}.oa.yaml"
+asm_file="${bname}.vga.yaml"
 bin_file="${bname}.ob.yaml"
 
 ruby orecc.rb $clike_file > $asm_file
