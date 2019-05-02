@@ -546,7 +546,7 @@
 - cp
 - reg_d
 - reg_b
-- compare
+- compare_v2
 - jump_eq
 - 556
 - set_reg_a
@@ -581,7 +581,7 @@
 - cp
 - reg_d
 - reg_b
-- compare
+- compare_v2
 - jump_eq
 - 591
 - set_reg_a
@@ -713,7 +713,7 @@
 - cp
 - reg_d
 - reg_b
-- compare
+- compare_v2
 - jump_eq
 - 723
 - set_reg_a
@@ -1548,7 +1548,7 @@
 - cp
 - reg_d
 - reg_b
-- compare
+- compare_v2
 - jump_eq
 - 1558
 - set_reg_a
@@ -1584,7 +1584,7 @@
 - cp
 - reg_d
 - reg_b
-- compare
+- compare_v2
 - jump_eq
 - 1594
 - set_reg_a

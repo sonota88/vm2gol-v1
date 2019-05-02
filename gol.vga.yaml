@@ -252,7 +252,7 @@
 - set_reg_d [bp-2]
 - set_reg_a [bp+3]
 - cp reg_d reg_b
-- compare
+- compare_v2
 - jump_eq then_10
 - set_reg_a 1
 - jump end_neq_10
@@ -270,7 +270,7 @@
 - set_reg_d [bp-1]
 - set_reg_a [bp+2]
 - cp reg_d reg_b
-- compare
+- compare_v2
 - jump_eq then_12
 - set_reg_a 1
 - jump end_neq_12
@@ -331,7 +331,7 @@
 - set_reg_d [bp-1]
 - set_reg_a 25
 - cp reg_d reg_b
-- compare
+- compare_v2
 - jump_eq then_14
 - set_reg_a 1
 - jump end_neq_14
@@ -712,7 +712,7 @@
 - set_reg_d [bp-2]
 - set_reg_a 5
 - cp reg_d reg_b
-- compare
+- compare_v2
 - jump_eq then_23
 - set_reg_a 1
 - jump end_neq_23
@@ -730,7 +730,7 @@
 - set_reg_d [bp-1]
 - set_reg_a 5
 - cp reg_d reg_b
-- compare
+- compare_v2
 - jump_eq then_25
 - set_reg_a 1
 - jump end_neq_25
