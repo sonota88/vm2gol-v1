@@ -90,7 +90,7 @@
 - "[bp-1]"
 - _debug
 - "<<--_call_set_to_ai"
-- set_arr
+- set_vram
 - "[bp-1]"
 - "[bp+5]"
 - cp
@@ -461,7 +461,7 @@
 - "[bp-1]"
 - _debug
 - "<<--_call_set_to_ai"
-- set_arr
+- set_vram
 - "[bp-1]"
 - "[bp+5]"
 - cp
@@ -754,7 +754,7 @@
 - cp
 - reg_a
 - "[bp-3]"
-- set_arr
+- set_vram
 - "[bp-1]"
 - "[bp-3]"
 - set_reg_d

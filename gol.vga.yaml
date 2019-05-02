@@ -39,7 +39,7 @@
 - add sp 4
 - cp reg_a [bp-1]
 - _debug <<--_call_set_to_ai
-- set_arr [bp-1] [bp+5]
+- set_vram [bp-1] [bp+5]
 - cp bp sp
 - pop bp
 - ret
@@ -216,7 +216,7 @@
 - add sp 4
 - cp reg_a [bp-1]
 - _debug <<--_call_set_to_ai
-- set_arr [bp-1] [bp+5]
+- set_vram [bp-1] [bp+5]
 - cp bp sp
 - pop bp
 - ret
@@ -351,7 +351,7 @@
 - cp reg_a [bp-2]
 - get_arr [bp-2] reg_a
 - cp reg_a [bp-3]
-- set_arr [bp-1] [bp-3]
+- set_vram [bp-1] [bp-3]
 - set_reg_d [bp-1]
 - set_reg_a 1
 - cp reg_d reg_b
