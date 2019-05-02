@@ -221,19 +221,18 @@
 - cp bp sp
 - pop bp
 - ret
-- label replace_with_buf
+- label replace_with_buf_v2
 - push bp
 - cp sp bp
 - sub sp 1
-- sub sp 1
-- sub sp 1
-- _debug 70---------
 - cp 0 [bp-1]
+- sub sp 1
 - cp 0 [bp-2]
+- sub sp 1
 - _debug -->>_while
 - label while_9
-- set_reg_d [bp-2]
-- set_reg_a [bp+3]
+- set_reg_d [bp-1]
+- set_reg_a 25
 - cp reg_d reg_b
 - compare_v2
 - jump_eq then_10
@@ -247,85 +246,6 @@
 - jump_eq true_9
 - jump end_while_9
 - label true_9
-- _debug ____loop_y
-- _debug -->>_while
-- label while_11
-- set_reg_d [bp-1]
-- set_reg_a [bp+2]
-- cp reg_d reg_b
-- compare_v2
-- jump_eq then_12
-- set_reg_a 1
-- jump end_neq_12
-- label then_12
-- set_reg_a 0
-- label end_neq_12
-- set_reg_b 1
-- compare_v2
-- jump_eq true_11
-- jump end_while_11
-- label true_11
-- _debug ____loop_x
-- _debug -->>_call_set_arr_get_buf
-- push [bp-2]
-- push [bp-1]
-- push [bp+2]
-- call arr_get_buf
-- add sp 3
-- cp reg_a [bp-3]
-- _debug <<--_call_set_arr_get_buf
-- _debug -->>_call_arr_set
-- push [bp-3]
-- push [bp-2]
-- push [bp-1]
-- push [bp+2]
-- call arr_set
-- add sp 4
-- _debug <<--_call_arr_set
-- set_reg_d [bp-1]
-- set_reg_a 1
-- cp reg_d reg_b
-- add_ab_v2
-- cp reg_a [bp-1]
-- jump while_11
-- label end_while_11
-- _debug <<--_while
-- set_reg_d [bp-2]
-- set_reg_a 1
-- cp reg_d reg_b
-- add_ab_v2
-- cp reg_a [bp-2]
-- jump while_9
-- label end_while_9
-- _debug <<--_while
-- cp bp sp
-- pop bp
-- ret
-- label replace_with_buf_v2
-- push bp
-- cp sp bp
-- sub sp 1
-- cp 0 [bp-1]
-- sub sp 1
-- cp 0 [bp-2]
-- sub sp 1
-- _debug -->>_while
-- label while_13
-- set_reg_d [bp-1]
-- set_reg_a 25
-- cp reg_d reg_b
-- compare_v2
-- jump_eq then_14
-- set_reg_a 1
-- jump end_neq_14
-- label then_14
-- set_reg_a 0
-- label end_neq_14
-- set_reg_b 1
-- compare_v2
-- jump_eq true_13
-- jump end_while_13
-- label true_13
 - _debug ____loop_ai
 - set_reg_d [bp-1]
 - set_reg_a 25
@@ -340,8 +260,8 @@
 - cp reg_d reg_b
 - add_ab_v2
 - cp reg_a [bp-1]
-- jump while_13
-- label end_while_13
+- jump while_9
+- label end_while_9
 - _debug <<--_while
 - cp bp sp
 - pop bp
@@ -571,9 +491,65 @@
 - cp reg_a [bp-4]
 - _debug <<--_rb
 - _debug -->>_case
-- label test_15_0
+- label test_11_0
 - set_reg_d [bp-5]
 - set_reg_a 1
+- cp reg_d reg_b
+- compare_v2
+- jump_eq then_12
+- set_reg_a 0
+- jump end_eq_12
+- label then_12
+- set_reg_a 1
+- label end_eq_12
+- set_reg_b 1
+- compare_v2
+- jump_eq when_11_0
+- jump end_case_11
+- label when_11_0
+- set_reg_d [bp-4]
+- set_reg_a 10
+- cp reg_d reg_b
+- add_ab_v2
+- cp reg_a [bp-4]
+- jump end_case_11
+- label end_case_11
+- _debug <<--_case
+- _debug @@@@_num_alive_を確認
+- _debug -->>_case
+- label test_13_0
+- set_reg_d [bp-4]
+- set_reg_a 3
+- cp reg_d reg_b
+- compare_v2
+- jump_eq then_14
+- set_reg_a 0
+- jump end_eq_14
+- label then_14
+- set_reg_a 1
+- label end_eq_14
+- set_reg_b 1
+- compare_v2
+- jump_eq when_13_0
+- jump test_13_1
+- label test_13_1
+- set_reg_d [bp-4]
+- set_reg_a 12
+- cp reg_d reg_b
+- compare_v2
+- jump_eq then_15
+- set_reg_a 0
+- jump end_eq_15
+- label then_15
+- set_reg_a 1
+- label end_eq_15
+- set_reg_b 1
+- compare_v2
+- jump_eq when_13_1
+- jump test_13_2
+- label test_13_2
+- set_reg_d [bp-4]
+- set_reg_a 13
 - cp reg_d reg_b
 - compare_v2
 - jump_eq then_16
@@ -584,92 +560,36 @@
 - label end_eq_16
 - set_reg_b 1
 - compare_v2
-- jump_eq when_15_0
-- jump end_case_15
-- label when_15_0
-- set_reg_d [bp-4]
-- set_reg_a 10
-- cp reg_d reg_b
-- add_ab_v2
-- cp reg_a [bp-4]
-- jump end_case_15
-- label end_case_15
-- _debug <<--_case
-- _debug @@@@_num_alive_を確認
-- _debug -->>_case
-- label test_17_0
-- set_reg_d [bp-4]
-- set_reg_a 3
-- cp reg_d reg_b
-- compare_v2
-- jump_eq then_18
-- set_reg_a 0
-- jump end_eq_18
-- label then_18
-- set_reg_a 1
-- label end_eq_18
-- set_reg_b 1
-- compare_v2
-- jump_eq when_17_0
-- jump test_17_1
-- label test_17_1
-- set_reg_d [bp-4]
-- set_reg_a 12
-- cp reg_d reg_b
-- compare_v2
-- jump_eq then_19
-- set_reg_a 0
-- jump end_eq_19
-- label then_19
-- set_reg_a 1
-- label end_eq_19
-- set_reg_b 1
-- compare_v2
-- jump_eq when_17_1
-- jump test_17_2
-- label test_17_2
-- set_reg_d [bp-4]
-- set_reg_a 13
-- cp reg_d reg_b
-- compare_v2
-- jump_eq then_20
-- set_reg_a 0
-- jump end_eq_20
-- label then_20
-- set_reg_a 1
-- label end_eq_20
-- set_reg_b 1
-- compare_v2
-- jump_eq when_17_2
-- jump test_17_3
-- label test_17_3
+- jump_eq when_13_2
+- jump test_13_3
+- label test_13_3
 - set_reg_d 1
 - set_reg_a 1
 - cp reg_d reg_b
 - compare_v2
-- jump_eq then_21
+- jump_eq then_17
 - set_reg_a 0
-- jump end_eq_21
-- label then_21
+- jump end_eq_17
+- label then_17
 - set_reg_a 1
-- label end_eq_21
+- label end_eq_17
 - set_reg_b 1
 - compare_v2
-- jump_eq when_17_3
-- jump end_case_17
-- label when_17_0
+- jump_eq when_13_3
+- jump end_case_13
+- label when_13_0
 - cp 1 [bp-6]
-- jump end_case_17
-- label when_17_1
+- jump end_case_13
+- label when_13_1
 - cp 1 [bp-6]
-- jump end_case_17
-- label when_17_2
+- jump end_case_13
+- label when_13_2
 - cp 1 [bp-6]
-- jump end_case_17
-- label when_17_3
+- jump end_case_13
+- label when_13_3
 - cp 0 [bp-6]
-- jump end_case_17
-- label end_case_17
+- jump end_case_13
+- label end_case_13
 - _debug <<--_case
 - _debug @@@@_next_val_を確認
 - _debug -->>_call_arr_set_buf
@@ -691,40 +611,40 @@
 - cp 0 [bp-1]
 - cp 0 [bp-2]
 - _debug -->>_while
-- label while_22
+- label while_18
 - set_reg_d [bp-2]
 - set_reg_a 5
 - cp reg_d reg_b
 - compare_v2
-- jump_eq then_23
+- jump_eq then_19
 - set_reg_a 1
-- jump end_neq_23
-- label then_23
+- jump end_neq_19
+- label then_19
 - set_reg_a 0
-- label end_neq_23
+- label end_neq_19
 - set_reg_b 1
 - compare_v2
-- jump_eq true_22
-- jump end_while_22
-- label true_22
+- jump_eq true_18
+- jump end_while_18
+- label true_18
 - cp 0 [bp-1]
 - _debug -->>_while
-- label while_24
+- label while_20
 - set_reg_d [bp-1]
 - set_reg_a 5
 - cp reg_d reg_b
 - compare_v2
-- jump_eq then_25
+- jump_eq then_21
 - set_reg_a 1
-- jump end_neq_25
-- label then_25
+- jump end_neq_21
+- label then_21
 - set_reg_a 0
-- label end_neq_25
+- label end_neq_21
 - set_reg_b 1
 - compare_v2
-- jump_eq true_24
-- jump end_while_24
-- label true_24
+- jump_eq true_20
+- jump end_while_20
+- label true_20
 - _debug -->>_call_gen_next_step
 - push [bp-2]
 - push [bp-1]
@@ -737,16 +657,16 @@
 - cp reg_d reg_b
 - add_ab_v2
 - cp reg_a [bp-1]
-- jump while_24
-- label end_while_24
+- jump while_20
+- label end_while_20
 - _debug <<--_while
 - set_reg_d [bp-2]
 - set_reg_a 1
 - cp reg_d reg_b
 - add_ab_v2
 - cp reg_a [bp-2]
-- jump while_22
-- label end_while_22
+- jump while_18
+- label end_while_18
 - _debug <<--_while
 - cp bp sp
 - pop bp
@@ -766,22 +686,22 @@
 - cp 1 arr[12]
 - sub sp 1
 - _debug -->>_while
-- label while_26
+- label while_22
 - set_reg_d 1
 - set_reg_a 1
 - cp reg_d reg_b
 - compare_v2
-- jump_eq then_27
+- jump_eq then_23
 - set_reg_a 0
-- jump end_eq_27
-- label then_27
+- jump end_eq_23
+- label then_23
 - set_reg_a 1
-- label end_eq_27
+- label end_eq_23
 - set_reg_b 1
 - compare_v2
-- jump_eq true_26
-- jump end_while_26
-- label true_26
+- jump_eq true_22
+- jump end_while_22
+- label true_22
 - set_reg_d [bp-3]
 - set_reg_a 1
 - cp reg_d reg_b
@@ -796,8 +716,8 @@
 - call replace_with_buf_v2
 - add sp 0
 - _debug <<--_call_replace_with_buf_v2
-- jump while_26
-- label end_while_26
+- jump while_22
+- label end_while_22
 - _debug <<--_while
 - cp bp sp
 - pop bp
