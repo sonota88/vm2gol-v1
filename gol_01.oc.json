@@ -1,0 +1,379 @@
+["stmts"
+
+ // バッファ配列用
+ ,["func"
+   ,"to_ai"
+   ,["w", "x", "y", "offset"]
+   ,[
+      ["var", "ai"] // array index
+     ,["var", "ai_buf"]
+
+     // ai = (+ (* y w) x)
+     ,["var", "yw"]
+     ,["set", "yw", ["*", "y", "w"]]
+
+     ,["set" ,"ai" ,["+" ,"yw" ,"x"]]
+     ,["set" ,"ai_buf" ,["+" ,"ai" , "offset"]]
+
+     ,["return", "ai_buf"]
+    ]
+  ]
+
+ ,["func"
+   ,"arr_set"
+   ,["w", "x", "y", "v"]
+   ,[
+      ["var", "ai"] // array index
+     ,["call_set", "ai", ["to_ai", "w", "x", "y", 0]]
+     ,["set", "arr[ai]", "v"]
+    ]
+  ]
+
+ ,["func"
+   ,"arr_get"
+   ,["w", "h", "x", "y"]
+   ,[
+      ["var", "ai"] // array index
+     ,["call_set", "ai", ["to_ai", "w", "x", "y", 0]]
+     ,["return", "arr[ai]"]
+    ]
+  ]
+
+ ,["func"
+   ,"arr_get_v2"
+   ,["w", "h", "x", "y"]
+   ,[
+     ["_debug", "---->> arr_get_v2"],
+     // actual x, y
+     ["var", "ax"]
+     ,["var", "ay"]
+
+     ,["_debug", "---->> arr_get_v2 > adjust x"]
+     ,["case"
+       ,[["lt", "x", 0]
+         // TODO w - 1
+         ,["_debug", "---->> x-1"]
+         ,["set", "ax", 4]]
+       // TODO w - 1
+       ,[["gt", "x", 4]
+         ,["_debug", "---->> x-2"]
+         ,["set", "ax", 0]]
+       ,[["eq", 1, 1]
+         ,["_debug", "---->> x-3"]
+         ,["set", "ax", "x"]]
+      ]
+
+     ,["_debug", "---->> arr_get_v2 > adjust y"]
+     ,["case"
+       ,[["lt", "y", 0]
+         ,["_debug", "---->> y-1"]
+         // TODO h - 1
+         ,["set", "ay", 4]]
+       // TODO h - 1
+       ,[["gt", "y", 4]
+         ,["_debug", "---->> y-2"]
+         ,["set", "ay", 0]]
+       ,[["eq", 1, 1]
+         ,["_debug", "---->> y-3"]
+         ,["set", "ay", "y"]]
+      ]
+     ,["_debug", "---->> arr_get_v2 > ax, ay を確認"]
+
+     ,["var", "ai"] // array index
+     ,["call_set", "ai", ["to_ai", "w", "ax", "ay", 0]]
+     ,["return", "arr[ai]"]
+    ]
+  ]
+
+ ,["func"
+   ,"arr_set_buf"
+   ,["w", "x", "y", "v"]
+   ,[
+      ["var", "ai"] // array index
+     ,["call_set", "ai", ["to_ai", "w", "x", "y", 25]]
+     ,["set", "arr[ai]", "v"]
+    ]
+  ]
+
+ ,["func"
+   ,"arr_get_buf"
+   ,["w", "x", "y"]
+   ,[
+      ["var", "ai"] // array index
+     ,["_debug", "57---------"]
+     ,["call_set", "ai", ["to_ai", "w", "x", "y", 25]]
+     ,["return", "arr[ai]"]
+    ]
+  ]
+
+ ,["func"
+   ,"replace_with_buf"
+   ,["w", "h"]
+   ,[
+      ["var", "x"]
+     ,["var", "y"]
+     ,["var", "value"]
+     ,["_debug", "70---------"]
+
+     ,["set", "x", 0]
+     ,["set", "y", 0]
+
+     ,["while", ["neq", "y", "h"]
+       ,[
+          ["_debug", "____loop_y"]
+         ,["while", ["neq", "x", "w"]
+           ,[
+              ["_debug", "____loop_x"]
+             ,["call_set", "value", ["arr_get_buf", "w", "x","y"]]
+             ,["call", "arr_set", "w", "x", "y", "value"]
+             ,["set", "x", ["+", "x", 1]]
+            ]
+          ]
+         ,["set", "y", ["+", "y", 1]]
+        ]
+      ]
+    ]
+  ]
+
+ ,["func"
+   ,"replace_with_buf_v2"
+   ,[]
+   ,[
+      ["var", "ai"]
+     ,["set", "ai", 0]
+
+     ,["var", "ai_buf"]
+     ,["set", "ai_buf", 0]
+
+     ,["var", "temp"]
+
+     ,["while", ["neq", "ai", 25]
+       ,[
+          ["_debug", "____loop_ai"]
+
+         ,["set", "ai_buf", ["+", "ai", 25]]
+
+         ,["set", "temp", "arr[ai_buf]"]
+         ,["set", "arr[ai]", "temp"]
+
+         ,["set", "ai", ["+", "ai", 1]]
+        ]
+      ]
+    ]
+  ]
+
+ ,["func", "gen_next_step", ["w", "x", "y"] ,[
+   // 24
+    ["var", "tx"]
+   ,["var", "ty"]
+
+   // 22
+   ,["var", "val"]
+   // ,["set", "val", 9999]
+
+   // 21
+   ,["var", "num_alive"]
+   ,["set", "num_alive", 0]
+
+   // 20
+   ,["var", "current_val"]
+   ,["call_set", "current_val", ["arr_get_v2", 5, 5, "x", "y"]]
+
+   // 19
+   ,["var", "next_val"]
+   ,["set", "next_val", 99]
+
+   // lt
+   ,["_debug", "-->> lt"]
+   ,["set", "tx", ["-", "x", 1]]
+   ,["set", "ty", ["-", "y", 1]]
+   ,["call_set", "val", ["arr_get_v2", 5, 5, "tx", "ty"]]
+   ,["set", "num_alive", ["+", "num_alive", "val"]]
+   ,["_debug", "<<-- lt"]
+
+   // t
+   ,["_debug", "-->> t"]
+   ,["set", "tx", "x"]
+   ,["set", "ty", ["-", "y", 1]]
+   ,["call_set", "val", ["arr_get_v2", 5, 5, "tx", "ty"]]
+   ,["set", "num_alive", ["+", "num_alive", "val"]]
+   ,["_debug", "<<-- t"]
+
+   // rt
+   ,["_debug", "-->> rt"]
+   ,["set", "tx", ["+", "x", 1]]
+   ,["set", "ty", ["-", "y", 1]]
+   ,["call_set", "val", ["arr_get_v2", 5, 5, "tx", "ty"]]
+   ,["set", "num_alive", ["+", "num_alive", "val"]]
+   ,["_debug", "<<-- rt"]
+
+   // l
+   ,["_debug", "-->> l"]
+   ,["set", "tx", ["-", "x", 1]]
+   ,["set", "ty", "y"]
+   ,["call_set", "val", ["arr_get_v2", 5, 5, "tx", "ty"]]
+   ,["set", "num_alive", ["+", "num_alive", "val"]]
+   ,["_debug", "<<-- l"]
+
+   // r
+   ,["_debug", "-->> r"]
+   ,["set", "tx", ["+", "x", 1]]
+   ,["set", "ty", "y"]
+   ,["call_set", "val", ["arr_get_v2", 5, 5, "tx", "ty"]]
+   ,["set", "num_alive", ["+", "num_alive", "val"]]
+   ,["_debug", "<<-- r"]
+
+   // lb
+   ,["_debug", "-->> lb"]
+   ,["set", "tx", ["-", "x", 1]]
+   ,["set", "ty", ["+", "y", 1]]
+   ,["call_set", "val", ["arr_get_v2", 5, 5, "tx", "ty"]]
+   ,["set", "num_alive", ["+", "num_alive", "val"]]
+   ,["_debug", "<<-- lb"]
+
+   // b
+   ,["_debug", "-->> b"]
+   ,["set", "tx", "x"]
+   ,["set", "ty", ["+", "y", 1]]
+   ,["call_set", "val", ["arr_get_v2", 5, 5, "tx", "ty"]]
+   ,["set", "num_alive", ["+", "num_alive", "val"]]
+   ,["_debug", "<<-- b"]
+
+   // rb
+   ,["_debug", "-->> rb"]
+   ,["set", "tx", ["+", "x", 1]]
+   ,["set", "ty", ["+", "y", 1]]
+   ,["call_set", "val", ["arr_get_v2", 5, 5, "tx", "ty"]]
+   ,["set", "num_alive", ["+", "num_alive", "val"]]
+   ,["_debug", "<<-- rb"]
+
+   ,["case"
+     ,[["eq", "current_val", 1]
+       ,["set", "num_alive", ["+", "num_alive", 10]]
+      ]
+    ]
+   ,["_debug", "@@@@ num_alive を確認"]
+
+   ,["case"
+     ,[["eq", "num_alive", 3]
+       ,["set", "next_val", 1]
+      ]
+     ,[["eq", "num_alive", 12]
+       ,["set", "next_val", 1]
+      ]
+     ,[["eq", "num_alive", 13]
+       ,["set", "next_val", 1]
+      ]
+     ,[["eq", 1, 1]
+       ,["set", "next_val", 0]
+      ]
+    ]
+
+   ,["_debug", "@@@@ next_val を確認"]
+
+   ,["call", "arr_set_buf", "w", "x", "y", "next_val"]
+  ]]
+
+ ,["func", "gen_next_step_loop", ["w"], [
+    ["var", "x"]
+   ,["var", "y"]
+   ,["set", "x", 0]
+   ,["set", "y", 0]
+
+   ,["while", ["neq", "y", 5], [
+      ["set", "x", 0]
+     ,["while", ["neq", "x", 5], [
+
+        ["call", "gen_next_step", "w", "x", "y"]
+        
+       ,["set", "x", ["+", "x", 1]]
+      ]]
+     ,["set", "y", ["+", "y", 1]]
+    ]]
+  ]]
+
+ ,["func"
+    // 関数名
+   ,"main"
+    // 引数
+   ,[]
+    // 本体
+   ,[
+      ["_debug", "start ----"]
+     ,["var", "w"]
+     ,["set", "w", 5]
+     ,["var", "h"]
+     ,["set", "h", 5]
+
+     // ,["call", "arr_set", "w", 0, 0, 1]
+
+     // ,["var", "temp"]
+     // ,["call_set", "temp", ["arr_get", "w", "h", 0, 0]]
+
+     // 配列の初期化 5x5, ブリンカー / x, y, val
+     // ,["call", "arr_set", "w", 2, 1, 1]
+     // ,["call", "arr_set", "w", 2, 2, 1]
+     // ,["call", "arr_set", "w", 2, 3, 1]
+     // ,["set", "arr[7]", 1]
+     // ,["set", "arr[12]", 1]
+     // ,["set", "arr[17]", 1]
+
+     // 配列の初期化 5x5, グライダー / x, y, val
+     ,["set", "arr[1]", 1]
+     ,["set", "arr[7]", 1]
+     ,["set", "arr[10]", 1]
+     ,["set", "arr[11]", 1]
+     ,["set", "arr[12]", 1]
+
+     // lt
+//     ,["call", "arr_set", "w", 4, 4, 1]
+     // t
+//     ,["call", "arr_set", "w", 0, 4, 1]
+     // rt
+//     ,["call", "arr_set", "w", 1, 4, 1]
+     // l
+//     ,["call", "arr_set", "w", 4, 0, 1]
+     // r
+//     ,["call", "arr_set", "w", 1, 0, 1]
+     // lb
+//     ,["call", "arr_set", "w", 4, 1, 1]
+     // b
+//     ,["call", "arr_set", "w", 0, 1, 1]
+     // rb
+//     ,["call", "arr_set", "w", 1, 1, 1]
+
+     // ,["var", "aa"]
+     // ,["call_set", "aa", ["arr_get", "w", 2, 1]]
+     // ,["call_set", "aa", ["arr_get", "w", 1, 1]]
+
+     // ,["case"
+     //   ,[["gt", -1, 0]
+     //     ,["set", "aa", 111]
+     //    ]
+     //   ,[["eq", 1, 1]
+     //     ,["set", "aa", 222]
+     //    ]
+     //  ]
+
+     // ,["set", "arr[24]", 1]
+     // ,["set", "arr[26]", 1]
+     // ,["set", "arr[27]", 1]
+     // ,["set", "arr[28]", 1]
+
+     // ,["call", "arr_get_v2", "w", "h", -1, -1]
+
+     // メインループ
+     ,["var", "cnt"]
+     ,["while", ["eq", 1, 1], [
+       ["set", "cnt", ["+", "cnt", 1]]
+
+       // gen_next_step
+       ,["call", "gen_next_step_loop", "w"]
+
+     //   // バッファの内容で置換
+       ,["call", "replace_with_buf_v2"]
+     ]]
+
+    ]
+  ]
+]
