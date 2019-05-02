@@ -2,13 +2,7 @@
 
 set -o errexit
 
-clike_file=
-if [ $# -eq 1 ]; then
-  clike_file="$1"
-else
-  clike_file="sample.oc.json"
-fi
-
+clike_file="$1"
 bname=$(basename $clike_file .oc.json)
 asm_file="${bname}.oa.yaml"
 bin_file="${bname}.ob.yaml"
