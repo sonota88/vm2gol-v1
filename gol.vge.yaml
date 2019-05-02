@@ -3,7 +3,7 @@
 - 1417
 - exit
 - label
-- to_ai
+- to_vi
 - push
 - bp
 - cp
@@ -325,7 +325,7 @@
 - sp
 - 1
 - _debug
-- "-->>_call_set_to_ai"
+- "-->>_call_set_to_vi"
 - push
 - 0
 - push
@@ -343,7 +343,7 @@
 - reg_a
 - "[bp-3]"
 - _debug
-- "<<--_call_set_to_ai"
+- "<<--_call_set_to_vi"
 - get_vram
 - "[bp-3]"
 - reg_a
@@ -364,7 +364,7 @@
 - sp
 - 1
 - _debug
-- "-->>_call_set_to_ai"
+- "-->>_call_set_to_vi"
 - push
 - 25
 - push
@@ -382,7 +382,7 @@
 - reg_a
 - "[bp-1]"
 - _debug
-- "<<--_call_set_to_ai"
+- "<<--_call_set_to_vi"
 - set_vram
 - "[bp-1]"
 - "[bp+5]"
@@ -405,7 +405,7 @@
 - _debug
 - 57---------
 - _debug
-- "-->>_call_set_to_ai"
+- "-->>_call_set_to_vi"
 - push
 - 25
 - push
@@ -423,7 +423,7 @@
 - reg_a
 - "[bp-1]"
 - _debug
-- "<<--_call_set_to_ai"
+- "<<--_call_set_to_vi"
 - get_vram
 - "[bp-1]"
 - reg_a

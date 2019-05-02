@@ -1,7 +1,7 @@
 ---
 - call main
 - exit
-- label to_ai
+- label to_vi
 - push bp
 - cp sp bp
 - sub sp 1
@@ -156,15 +156,15 @@
 - _debug <<--_case
 - _debug ---->>_arr_get_v2_>_ax,_ay_を確認
 - sub sp 1
-- _debug -->>_call_set_to_ai
+- _debug -->>_call_set_to_vi
 - push 0
 - push [bp-2]
 - push [bp-1]
 - push [bp+2]
-- call to_ai
+- call to_vi
 - add sp 4
 - cp reg_a [bp-3]
-- _debug <<--_call_set_to_ai
+- _debug <<--_call_set_to_vi
 - get_vram [bp-3] reg_a
 - cp bp sp
 - pop bp
@@ -173,15 +173,15 @@
 - push bp
 - cp sp bp
 - sub sp 1
-- _debug -->>_call_set_to_ai
+- _debug -->>_call_set_to_vi
 - push 25
 - push [bp+4]
 - push [bp+3]
 - push [bp+2]
-- call to_ai
+- call to_vi
 - add sp 4
 - cp reg_a [bp-1]
-- _debug <<--_call_set_to_ai
+- _debug <<--_call_set_to_vi
 - set_vram [bp-1] [bp+5]
 - cp bp sp
 - pop bp
@@ -191,15 +191,15 @@
 - cp sp bp
 - sub sp 1
 - _debug 57---------
-- _debug -->>_call_set_to_ai
+- _debug -->>_call_set_to_vi
 - push 25
 - push [bp+4]
 - push [bp+3]
 - push [bp+2]
-- call to_ai
+- call to_vi
 - add sp 4
 - cp reg_a [bp-1]
-- _debug <<--_call_set_to_ai
+- _debug <<--_call_set_to_vi
 - get_vram [bp-1] reg_a
 - cp bp sp
 - pop bp
