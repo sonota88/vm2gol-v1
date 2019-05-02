@@ -104,16 +104,6 @@ class Memory
     cols.map{|col| col == 1 ? "@" : "." }.join("")
   end
 
-  def dump_arr_v2
-    rows = @vram.each_slice(5).to_a
-    main = rows[0..4]
-    buf = rows[5..9]
-
-    (0..4).map{|li|
-      format_cols(main[li])
-    }.join("\n")
-  end
-
   def dump_arr
     rows = @vram.each_slice(5).to_a
     main = rows[0..4]
