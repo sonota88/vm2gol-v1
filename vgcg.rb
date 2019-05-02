@@ -370,7 +370,7 @@ def builtin_neq(rest, lvar_names, fn_args)
   codes.concat proc_exp_two(left, right, lvar_names, fn_args)
 
   codes << "cp reg_d reg_b"
-  codes << "compare"
+  codes << "compare_v2"
   codes << "jump_eq then_#{label_id}"
   # else
   codes << "set_reg_a 1"
