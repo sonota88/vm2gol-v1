@@ -462,7 +462,7 @@ def proc_stmt(tree, fn_names, lvar_names, fn_args)
         case
         when lvar_names.include?(var_name)
           var_pos = lvar_names.index(var_name) + 1
-          codes << "get_arr [bp-#{var_pos}] reg_a"
+          codes << "get_vram [bp-#{var_pos}] reg_a"
         else
           raise not_yet_impl(var_name)
         end
@@ -517,7 +517,7 @@ def proc_stmt(tree, fn_names, lvar_names, fn_args)
         case
         when lvar_names.include?(var_name)
           var_pos = lvar_names.index(var_name) + 1
-          codes << "get_arr [bp-#{var_pos}] reg_a"
+          codes << "get_vram [bp-#{var_pos}] reg_a"
         else
           raise not_yet_impl(var_name)
         end
