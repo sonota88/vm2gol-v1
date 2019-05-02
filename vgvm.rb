@@ -433,7 +433,7 @@ class Cpu
 #{ @mem.dump_main(@ip) }
 ---- memory (stack) ---- sp(#{@sp}) bp(#{@bp})
 #{ @mem.dump_stack(@sp, @bp) }
----- memory (array) ----
+---- memory (vram) ----
 #{ @mem.dump_arr() }
     EOB
   end
