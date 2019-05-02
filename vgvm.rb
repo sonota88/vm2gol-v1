@@ -33,7 +33,7 @@ class Memory
       x = @main[i]
       num_args =
         case x
-        when "cp", "add", "sub", "set_arr", "get_arr"
+        when "cp", "add", "sub", "set_vram", "get_arr"
           2
         when "push", "pop", "call", "set_reg_a", "set_reg_b", "set_reg_d", "label", "jump_eq", "jump", "jump_above", "jump_below", "_debug"
           1
@@ -198,7 +198,7 @@ class Cpu
             end
         set_reg_d(n)
         @ip += 2
-      when "set_arr"
+      when "set_vram"
         arg1 = @mem.main[@ip + 1]
         arg2 = @mem.main[@ip + 2]
 
