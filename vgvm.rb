@@ -393,7 +393,7 @@ class Cpu
         @bp
       when /^\[(.+)\]$/
         get_val($1)
-      when /^arr\[(\d+)\]$/
+      when /^vram\[(\d+)\]$/
         idx = $1.to_i
         @mem.vram[idx]
       when /^(\d+)$/
@@ -417,7 +417,7 @@ class Cpu
       @bp = src_val
     when /^\[(.+)\]$/
       set_val($1, src_val)
-    when /^arr\[(\d+)\]$/
+    when /^vram\[(\d+)\]$/
       idx = $1.to_i
       @mem.vram[idx] = src_val
     else

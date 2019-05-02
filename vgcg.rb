@@ -453,9 +453,9 @@ def proc_stmt(tree, fn_names, lvar_names, fn_args)
         "[bp-#{pos}]"
       elsif rest[1] == "reg_a"
         "reg_a"
-      elsif /^arr\[(\d+)\]$/ =~ rest[1]
+      elsif /^vram\[(\d+)\]$/ =~ rest[1]
         rest[1]
-      elsif /^arr\[([a-z_][a-z0-9_]*)\]$/ =~ rest[1]
+      elsif /^vram\[([a-z_][a-z0-9_]*)\]$/ =~ rest[1]
         var_name = $1
         case
         when lvar_names.include?(var_name)
@@ -471,7 +471,7 @@ def proc_stmt(tree, fn_names, lvar_names, fn_args)
 
     var_name = rest[0]
     case var_name
-    when /^arr\[(.+)\]$/
+    when /^vram\[(.+)\]$/
       idx = $1
       case idx
       when /^\d+$/
@@ -505,7 +505,7 @@ def proc_stmt(tree, fn_names, lvar_names, fn_args)
   when "return"
     retval = rest[0]
     case
-    when /^arr\[(.+)\]$/ =~ retval
+    when /^vram\[(.+)\]$/ =~ retval
       idx = $1
       case idx
       when /^(\d+)$/

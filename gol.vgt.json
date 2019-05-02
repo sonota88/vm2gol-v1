@@ -61,7 +61,7 @@
 
      ,["var", "ai"] // array index
      ,["call_set", "ai", ["to_ai", "w", "ax", "ay", 0]]
-     ,["return", "arr[ai]"]
+     ,["return", "vram[ai]"]
     ]
   ]
 
@@ -71,7 +71,7 @@
    ,[
       ["var", "ai"] // array index
      ,["call_set", "ai", ["to_ai", "w", "x", "y", 25]]
-     ,["set", "arr[ai]", "v"]
+     ,["set", "vram[ai]", "v"]
     ]
   ]
 
@@ -82,7 +82,7 @@
       ["var", "ai"] // array index
      ,["_debug", "57---------"]
      ,["call_set", "ai", ["to_ai", "w", "x", "y", 25]]
-     ,["return", "arr[ai]"]
+     ,["return", "vram[ai]"]
     ]
   ]
 
@@ -104,8 +104,8 @@
 
          ,["set", "ai_buf", ["+", "ai", 25]]
 
-         ,["set", "temp", "arr[ai_buf]"]
-         ,["set", "arr[ai]", "temp"]
+         ,["set", "temp", "vram[ai_buf]"]
+         ,["set", "vram[ai]", "temp"]
 
          ,["set", "ai", ["+", "ai", 1]]
         ]
@@ -257,16 +257,16 @@
      ,["set", "h", 5]
 
      // 配列の初期化 5x5, ブリンカー / x, y, val
-     // ,["set", "arr[7]", 1]
-     // ,["set", "arr[12]", 1]
-     // ,["set", "arr[17]", 1]
+     // ,["set", "vram[7]", 1]
+     // ,["set", "vram[12]", 1]
+     // ,["set", "vram[17]", 1]
 
      // 配列の初期化 5x5, グライダー / x, y, val
-     ,["set", "arr[1]", 1]
-     ,["set", "arr[7]", 1]
-     ,["set", "arr[10]", 1]
-     ,["set", "arr[11]", 1]
-     ,["set", "arr[12]", 1]
+     ,["set", "vram[1]", 1]
+     ,["set", "vram[7]", 1]
+     ,["set", "vram[10]", 1]
+     ,["set", "vram[11]", 1]
+     ,["set", "vram[12]", 1]
 
      // メインループ
      ,["var", "cnt"]
