@@ -12,7 +12,7 @@ end
 
 class Memory
 
-  attr_accessor :main, :stack, :arr
+  attr_accessor :main, :stack, :vram
 
   MAIN_DUMP_WIDTH = 30
 
@@ -22,7 +22,7 @@ class Memory
 
     @stack = Array.new(stack_size, nil)
 
-    @arr = Array.new(50, 0)
+    @vram = Array.new(50, 0)
   end
 
   def dump_main(ip)
@@ -101,7 +101,7 @@ class Memory
   end
 
   def dump_arr_v1
-    rows = @arr.each_slice(5).to_a
+    rows = @vram.each_slice(5).to_a
     rows.map{|cols|
       cols.map{|col| col == 1 ? "@" : "." }.join("")
     }.join("\n")
@@ -112,7 +112,7 @@ class Memory
   end
 
   def dump_arr_v2
-    rows = @arr.each_slice(5).to_a
+    rows = @vram.each_slice(5).to_a
     main = rows[0..4]
     buf = rows[5..9]
 
@@ -122,7 +122,7 @@ class Memory
   end
 
   def dump_arr
-    rows = @arr.each_slice(5).to_a
+    rows = @vram.each_slice(5).to_a
     main = rows[0..4]
     buf = rows[5..9]
 
@@ -213,7 +213,7 @@ class Cpu
               mem_get_val(arg2)
             end
 
-        @mem.arr[n1] = n2
+        @mem.vram[n1] = n2
 
         @ip += 3
       when "get_arr" # ai, dest
@@ -225,7 +225,7 @@ class Cpu
              else
                mem_get_val(arg1)
              end
-        val = @mem.arr[ai]
+        val = @mem.vram[ai]
 
         case arg2
         when "reg_a"
@@ -423,7 +423,7 @@ class Cpu
         get_val($1)
       when /^arr\[(\d+)\]$/
         idx = $1.to_i
-        @mem.arr[idx]
+        @mem.vram[idx]
       when /^(\d+)$/
         $1.to_i
       else
@@ -447,7 +447,7 @@ class Cpu
       set_val($1, src_val)
     when /^arr\[(\d+)\]$/
       idx = $1.to_i
-      @mem.arr[idx] = src_val
+      @mem.vram[idx] = src_val
     else
       raise not_yet_impl(arg2)
     end
