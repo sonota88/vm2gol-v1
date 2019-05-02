@@ -344,7 +344,6 @@ class Cpu
         raise "unknown operator (#{op})"
       end
 
-      # dump_v2
       dump if @step % 20 == 0
       # sleep 1
       $stdin.gets if @step > 10000000
@@ -456,15 +455,6 @@ class Cpu
 #{ @mem.dump_stack(@sp, @bp) }
 ---- memory (array) ----
 #{ @mem.dump_arr() }
-    EOB
-  end
-
-  def dump_v2
-    puts <<-EOB
-
------
-
-#{ @mem.dump_arr_v2() }
     EOB
   end
 
