@@ -76,17 +76,6 @@
   ]
 
  ,["func"
-   ,"arr_get_buf"
-   ,["w", "x", "y"]
-   ,[
-      ["var", "vi"] // vram index
-     ,["_debug", "57---------"]
-     ,["call_set", "vi", ["to_vi", "w", "x", "y", 25]]
-     ,["return", "vram[vi]"]
-    ]
-  ]
-
- ,["func"
    ,"replace_with_buf_v2"
    ,[]
    ,[
