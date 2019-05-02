@@ -261,19 +261,6 @@ def builtin_sub(rest, lvar_names, fn_args)
 end
 
 # 結果は reg_a に入れる
-def builtin_mult(rest, lvar_names)
-  left, right = rest
-  alines = []
-
-  alines += proc_exp_two(left, right, lvar_names)
-
-  alines << "cp reg_d reg_b"
-  alines << "mult_ab" #=> reg_a に入る
-
-  alines
-end
-
-# 結果は reg_a に入れる
 def builtin_mult(rest, lvar_names, fn_args)
   left, right = rest
   alines = []
