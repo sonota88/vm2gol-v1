@@ -102,7 +102,7 @@ def proc_case(whens, fn_names, lvar_names, fn_args)
       codes << "label test_#{label_id}_#{when_idx}"
       codes.concat render_exp(cond, lvar_names, fn_args) #=> 結果は reg_a
       codes << "set_reg_b 1"
-      codes << "compare"
+      codes << "compare_v2"
 
       # reg_a == 1 (結果が true) の場合
       codes << "jump_eq when_#{label_id}_#{when_idx}"
