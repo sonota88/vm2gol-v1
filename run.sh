@@ -8,5 +8,5 @@ asm_file="${bname}.vga.yaml"
 exe_file="${bname}.vge.yaml"
 
 ruby orecc.rb $clike_file > $asm_file
-ruby oreasm.rb $asm_file > $exe_file
+ruby vgasm.rb $asm_file > $exe_file
 ruby vgvm.rb $exe_file
