@@ -5,15 +5,15 @@
    ,"to_ai"
    ,["w", "x", "y", "offset"]
    ,[
-      ["var", "ai"] // array index
+      ["var", "vi"] // vram index
      ,["var", "ai_buf"]
 
      // ai = (+ (* y w) x)
      ,["var", "yw"]
      ,["set", "yw", ["*", "y", "w"]]
 
-     ,["set" ,"ai" ,["+" ,"yw" ,"x"]]
-     ,["set" ,"ai_buf" ,["+" ,"ai" , "offset"]]
+     ,["set" ,"vi" ,["+" ,"yw" ,"x"]]
+     ,["set" ,"ai_buf" ,["+" ,"vi" , "offset"]]
 
      ,["return", "ai_buf"]
     ]
@@ -59,9 +59,9 @@
       ]
      ,["_debug", "---->> arr_get_v2 > ax, ay を確認"]
 
-     ,["var", "ai"] // array index
-     ,["call_set", "ai", ["to_ai", "w", "ax", "ay", 0]]
-     ,["return", "vram[ai]"]
+     ,["var", "vi"] // vram index
+     ,["call_set", "vi", ["to_ai", "w", "ax", "ay", 0]]
+     ,["return", "vram[vi]"]
     ]
   ]
 
@@ -69,9 +69,9 @@
    ,"arr_set_buf"
    ,["w", "x", "y", "v"]
    ,[
-      ["var", "ai"] // array index
-     ,["call_set", "ai", ["to_ai", "w", "x", "y", 25]]
-     ,["set", "vram[ai]", "v"]
+      ["var", "vi"] // vram index
+     ,["call_set", "vi", ["to_ai", "w", "x", "y", 25]]
+     ,["set", "vram[vi]", "v"]
     ]
   ]
 
@@ -79,10 +79,10 @@
    ,"arr_get_buf"
    ,["w", "x", "y"]
    ,[
-      ["var", "ai"] // array index
+      ["var", "vi"] // vram index
      ,["_debug", "57---------"]
-     ,["call_set", "ai", ["to_ai", "w", "x", "y", 25]]
-     ,["return", "vram[ai]"]
+     ,["call_set", "vi", ["to_ai", "w", "x", "y", 25]]
+     ,["return", "vram[vi]"]
     ]
   ]
 
@@ -90,24 +90,24 @@
    ,"replace_with_buf_v2"
    ,[]
    ,[
-      ["var", "ai"]
-     ,["set", "ai", 0]
+      ["var", "vi"]
+     ,["set", "vi", 0]
 
      ,["var", "ai_buf"]
      ,["set", "ai_buf", 0]
 
      ,["var", "temp"]
 
-     ,["while", ["neq", "ai", 25]
+     ,["while", ["neq", "vi", 25]
        ,[
           ["_debug", "____loop_ai"]
 
-         ,["set", "ai_buf", ["+", "ai", 25]]
+         ,["set", "ai_buf", ["+", "vi", 25]]
 
          ,["set", "temp", "vram[ai_buf]"]
-         ,["set", "vram[ai]", "temp"]
+         ,["set", "vram[vi]", "temp"]
 
-         ,["set", "ai", ["+", "ai", 1]]
+         ,["set", "vi", ["+", "vi", 1]]
         ]
       ]
     ]
