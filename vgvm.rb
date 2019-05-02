@@ -103,7 +103,7 @@ class Memory
     cols.map{|col| col == 1 ? "@" : "." }.join("")
   end
 
-  def dump_arr
+  def dump_vram
     rows = @vram.each_slice(5).to_a
     main = rows[0..4]
     buf = rows[5..9]
@@ -434,7 +434,7 @@ class Cpu
 ---- memory (stack) ---- sp(#{@sp}) bp(#{@bp})
 #{ @mem.dump_stack(@sp, @bp) }
 ---- memory (vram) ----
-#{ @mem.dump_arr() }
+#{ @mem.dump_vram() }
     EOB
   end
 
