@@ -80,7 +80,7 @@
 - set_reg_a 1
 - label end_lt_2
 - set_reg_b 1
-- compare
+- compare_v2
 - jump_eq when_1_0
 - jump test_1_1
 - label test_1_1
@@ -95,7 +95,7 @@
 - set_reg_a 1
 - label end_gt_3
 - set_reg_b 1
-- compare
+- compare_v2
 - jump_eq when_1_1
 - jump test_1_2
 - label test_1_2
@@ -110,7 +110,7 @@
 - set_reg_a 1
 - label end_eq_4
 - set_reg_b 1
-- compare
+- compare_v2
 - jump_eq when_1_2
 - jump end_case_1
 - label when_1_0
@@ -141,7 +141,7 @@
 - set_reg_a 1
 - label end_lt_6
 - set_reg_b 1
-- compare
+- compare_v2
 - jump_eq when_5_0
 - jump test_5_1
 - label test_5_1
@@ -156,7 +156,7 @@
 - set_reg_a 1
 - label end_gt_7
 - set_reg_b 1
-- compare
+- compare_v2
 - jump_eq when_5_1
 - jump test_5_2
 - label test_5_2
@@ -171,7 +171,7 @@
 - set_reg_a 1
 - label end_eq_8
 - set_reg_b 1
-- compare
+- compare_v2
 - jump_eq when_5_2
 - jump end_case_5
 - label when_5_0
@@ -600,7 +600,7 @@
 - set_reg_a 1
 - label end_eq_16
 - set_reg_b 1
-- compare
+- compare_v2
 - jump_eq when_15_0
 - jump end_case_15
 - label when_15_0
@@ -626,7 +626,7 @@
 - set_reg_a 1
 - label end_eq_18
 - set_reg_b 1
-- compare
+- compare_v2
 - jump_eq when_17_0
 - jump test_17_1
 - label test_17_1
@@ -641,7 +641,7 @@
 - set_reg_a 1
 - label end_eq_19
 - set_reg_b 1
-- compare
+- compare_v2
 - jump_eq when_17_1
 - jump test_17_2
 - label test_17_2
@@ -656,7 +656,7 @@
 - set_reg_a 1
 - label end_eq_20
 - set_reg_b 1
-- compare
+- compare_v2
 - jump_eq when_17_2
 - jump test_17_3
 - label test_17_3
@@ -671,7 +671,7 @@
 - set_reg_a 1
 - label end_eq_21
 - set_reg_b 1
-- compare
+- compare_v2
 - jump_eq when_17_3
 - jump end_case_17
 - label when_17_0
