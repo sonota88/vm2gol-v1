@@ -97,35 +97,6 @@
   ]
 
  ,["func"
-   ,"replace_with_buf"
-   ,["w", "h"]
-   ,[
-      ["var", "x"]
-     ,["var", "y"]
-     ,["var", "value"]
-     ,["_debug", "70---------"]
-
-     ,["set", "x", 0]
-     ,["set", "y", 0]
-
-     ,["while", ["neq", "y", "h"]
-       ,[
-          ["_debug", "____loop_y"]
-         ,["while", ["neq", "x", "w"]
-           ,[
-              ["_debug", "____loop_x"]
-             ,["call_set", "value", ["arr_get_buf", "w", "x","y"]]
-             ,["call", "arr_set", "w", "x", "y", "value"]
-             ,["set", "x", ["+", "x", 1]]
-            ]
-          ]
-         ,["set", "y", ["+", "y", 1]]
-        ]
-      ]
-    ]
-  ]
-
- ,["func"
    ,"replace_with_buf_v2"
    ,[]
    ,[
