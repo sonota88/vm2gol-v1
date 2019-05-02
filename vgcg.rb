@@ -1,4 +1,7 @@
 # coding: utf-8
+
+# alines: asm lines
+
 require "json"
 require "yaml"
 require "pp"
@@ -30,46 +33,46 @@ def def_func(rest, fn_names)
   fn_args = rest[1]
   body = rest[2]
 
-  codes = []
+  alines = []
 
-  codes << "label #{fn_name}"
+  alines << "label #{fn_name}"
 
-  codes << "push bp" # 呼び出し元の bp をスタックに push
-  codes << "cp sp bp" # bp が呼び出し先になるように sp からコピー
+  alines << "push bp" # 呼び出し元の bp をスタックに push
+  alines << "cp sp bp" # bp が呼び出し先になるように sp からコピー
 
   # 本体
   local_var_names_sub = []
   body.each do |stmt|
     body_codes = proc_stmt(stmt, fn_names, local_var_names_sub, fn_args)
-    codes.concat(body_codes)
+    alines.concat(body_codes)
     if stmt[0] == "var"
       local_var_names_sub << stmt[1]
     end
   end
 
-  codes << "cp bp sp" # 呼び出し元の bp を pop するために sp を移動
-  codes << "pop bp" # 呼び出し元の bp に戻す
-  codes << "ret"
+  alines << "cp bp sp" # 呼び出し元の bp を pop するために sp を移動
+  alines << "pop bp" # 呼び出し元の bp に戻す
+  alines << "ret"
 
-  codes
+  alines
 end
 
 def call_func(fn_name, rest, lvar_names, fn_args)
-  codes = []
+  alines = []
 
   # 逆順に積む
   rest.reverse.each do |arg|
     case arg
     when Integer
-      codes << "push #{arg}"
+      alines << "push #{arg}"
     when String
       case
       when lvar_names.include?(arg)
         pos = lvar_names.index(arg) + 1
-        codes << "push [bp-#{pos}]"
+        alines << "push [bp-#{pos}]"
       when fn_args.include?(arg)
         pos = fn_args.index(arg) + 2
-        codes << "push [bp+#{pos}]"
+        alines << "push [bp+#{pos}]"
       else
         raise not_yet_impl(arg)
       end
@@ -77,16 +80,16 @@ def call_func(fn_name, rest, lvar_names, fn_args)
       raise not_yet_impl(arg)
     end
   end
-  codes << "call #{fn_name}"
+  alines << "call #{fn_name}"
 
   # 引数の分を戻す
-  codes << "add sp #{rest.size}"
+  alines << "add sp #{rest.size}"
 
-  codes
+  alines
 end
 
 def proc_case(whens, fn_names, lvar_names, fn_args)
-  codes = []
+  alines = []
   $label_id += 1
   label_id = $label_id
 
@@ -99,21 +102,21 @@ def proc_case(whens, fn_names, lvar_names, fn_args)
     cond_head, *cond_rest = cond
     case cond_head
     when "eq", "gt", "lt"
-      codes << "label test_#{label_id}_#{when_idx}"
-      codes.concat render_exp(cond, lvar_names, fn_args) #=> 結果は reg_a
-      codes << "set_reg_b 1"
-      codes << "compare_v2"
+      alines << "label test_#{label_id}_#{when_idx}"
+      alines.concat render_exp(cond, lvar_names, fn_args) #=> 結果は reg_a
+      alines << "set_reg_b 1"
+      alines << "compare_v2"
 
       # reg_a == 1 (結果が true) の場合
-      codes << "jump_eq when_#{label_id}_#{when_idx}"
+      alines << "jump_eq when_#{label_id}_#{when_idx}"
 
       # reg_a != 1 (結果が false) の場合
       if when_idx + 1 < whens.size
         # 次の条件を試す
-        codes << "jump test_#{label_id}_#{when_idx + 1}"
+        alines << "jump test_#{label_id}_#{when_idx + 1}"
       else
         # 最後へ
-        codes << "jump end_case_#{label_id}"
+        alines << "jump end_case_#{label_id}"
       end
 
       then_stmts = ["label when_#{label_id}_#{when_idx}"]
@@ -129,55 +132,55 @@ def proc_case(whens, fn_names, lvar_names, fn_args)
 
   when_bodies.each{|then_stmts|
     then_stmts.each{|stmt|
-      codes << stmt
+      alines << stmt
     }
   }
 
-  codes << "label end_case_#{label_id}"
+  alines << "label end_case_#{label_id}"
 
-  codes
+  alines
 end
 
 def proc_while(rest, fn_names, lvar_names, fn_args)
   cond_exp, body = rest
-  codes = []
+  alines = []
   $label_id += 1
   label_id = $label_id
 
-  codes << "label while_#{label_id}"
-  codes.concat render_exp(cond_exp, lvar_names, fn_args)
-  codes << "set_reg_b 1"
-  codes << "compare_v2"
-  codes << "jump_eq true_#{label_id}"
+  alines << "label while_#{label_id}"
+  alines.concat render_exp(cond_exp, lvar_names, fn_args)
+  alines << "set_reg_b 1"
+  alines << "compare_v2"
+  alines << "jump_eq true_#{label_id}"
   # false の場合ループを抜ける
-  codes << "jump end_while_#{label_id}"
+  alines << "jump end_while_#{label_id}"
 
-  codes << "label true_#{label_id}"
+  alines << "label true_#{label_id}"
   # true の場合 body を実行
 
   body.each{|stmt|
-    codes.concat proc_stmt(stmt, fn_names, lvar_names, fn_args)
+    alines.concat proc_stmt(stmt, fn_names, lvar_names, fn_args)
   }
 
-  codes << "jump while_#{label_id}"
+  alines << "jump while_#{label_id}"
 
-  codes << "label end_while_#{label_id}"
+  alines << "label end_while_#{label_id}"
 
-  codes
+  alines
 end
 
 # 2引数の式を展開
 def proc_exp_two(left, right, lvar_names, fn_args)
-  codes = []
+  alines = []
 
   # 終端でなければ、先に深い方を処理する
   if left.is_a? Array
-    codes.concat render_exp(left, lvar_names)
-    codes << "cp reg_a reg_d" #=> 評価結果を退避 a => d
+    alines.concat render_exp(left, lvar_names)
+    alines << "cp reg_a reg_d" #=> 評価結果を退避 a => d
   end
 
   if right.is_a? Array
-    codes.concat render_exp(right, lvar_names)
+    alines.concat render_exp(right, lvar_names)
     # 評価結果は a に入ってる
   end
 
@@ -186,17 +189,17 @@ def proc_exp_two(left, right, lvar_names, fn_args)
   when Array
     ; # skip
   when Integer
-    codes << "set_reg_d #{left}"
+    alines << "set_reg_d #{left}"
   when String
     case
     when /^\d+$/ =~ left
-      codes << "set_reg_d #{left}"
+      alines << "set_reg_d #{left}"
     when lvar_names.include?(left)
       pos = lvar_names.index(left) + 1
-      codes << "set_reg_d [bp-#{pos}]"
+      alines << "set_reg_d [bp-#{pos}]"
     when fn_args.include?(left)
       pos = fn_args.index(left) + 2
-      codes << "set_reg_d [bp+#{pos}]"
+      alines << "set_reg_d [bp+#{pos}]"
     else
       raise "not yet impl (#{left})"
     end
@@ -210,205 +213,205 @@ def proc_exp_two(left, right, lvar_names, fn_args)
   when String
     case
     # when /^\d+$/ =~ right
-    #   codes << "set_reg_d #{right}"
+    #   alines << "set_reg_d #{right}"
     when lvar_names.include?(right)
       pos = lvar_names.index(right) + 1
-      codes << "set_reg_a [bp-#{pos}]"
+      alines << "set_reg_a [bp-#{pos}]"
     when fn_args.include?(right)
       pos = fn_args.index(right) + 2
-      codes << "set_reg_a [bp+#{pos}]"
+      alines << "set_reg_a [bp+#{pos}]"
     else
       raise "not yet impl (#{right})"
     end
   else
-    codes << "set_reg_a #{right}"
+    alines << "set_reg_a #{right}"
   end
 
-  codes
+  alines
 end
 
 # 結果は reg_a に入れる
 def builtin_add(rest, lvar_names, fn_args)
   left, right = rest
-  codes = []
+  alines = []
 
-  codes.concat proc_exp_two(left, right, lvar_names, fn_args)
+  alines.concat proc_exp_two(left, right, lvar_names, fn_args)
 
-  codes << "cp reg_d reg_b"
-  codes << "add_ab_v2" #=> reg_a に入る
+  alines << "cp reg_d reg_b"
+  alines << "add_ab_v2" #=> reg_a に入る
 
-  codes
+  alines
 end
 
 # 結果は reg_a に入れる
 def builtin_sub(rest, lvar_names, fn_args)
   left, right = rest
-  codes = []
+  alines = []
 
-  codes.concat proc_exp_two(left, right, lvar_names, fn_args)
+  alines.concat proc_exp_two(left, right, lvar_names, fn_args)
 
   # きれいではないが a - b となるように入れ替え
   # 加算のときは順番関係ないので問題に気づけてなかった…
-  codes << "cp reg_a reg_c"
-  codes << "cp reg_d reg_a"
-  codes << "cp reg_c reg_b"
+  alines << "cp reg_a reg_c"
+  alines << "cp reg_d reg_a"
+  alines << "cp reg_c reg_b"
 
-  codes << "sub_ab" #=> reg_a に入る
+  alines << "sub_ab" #=> reg_a に入る
 
-  codes
+  alines
 end
 
 # 結果は reg_a に入れる
 def builtin_mult(rest, lvar_names)
   left, right = rest
-  codes = []
+  alines = []
 
-  codes.concat proc_exp_two(left, right, lvar_names)
+  alines.concat proc_exp_two(left, right, lvar_names)
 
-  codes << "cp reg_d reg_b"
-  codes << "mult_ab" #=> reg_a に入る
+  alines << "cp reg_d reg_b"
+  alines << "mult_ab" #=> reg_a に入る
 
-  codes
+  alines
 end
 
 # 結果は reg_a に入れる
 def builtin_mult(rest, lvar_names, fn_args)
   left, right = rest
-  codes = []
+  alines = []
 
-  codes.concat proc_exp_two(left, right, lvar_names, fn_args)
+  alines.concat proc_exp_two(left, right, lvar_names, fn_args)
 
-  codes << "cp reg_d reg_b"
-  codes << "mult_ab"
+  alines << "cp reg_d reg_b"
+  alines << "mult_ab"
 
-  codes
+  alines
 end
 
 # 結果は reg_a に入れる
 def builtin_eq(rest, lvar_names, fn_args)
   left, right = rest
-  codes = []
+  alines = []
   $label_id +=1
   label_id = $label_id
 
-  codes.concat proc_exp_two(left, right, lvar_names, fn_args)
+  alines.concat proc_exp_two(left, right, lvar_names, fn_args)
 
-  codes << "cp reg_d reg_b"
-  codes << "compare_v2"
-  codes << "jump_eq then_#{label_id}"
+  alines << "cp reg_d reg_b"
+  alines << "compare_v2"
+  alines << "jump_eq then_#{label_id}"
   # else
-  codes << "set_reg_a 0"
-  codes << "jump end_eq_#{label_id}"
+  alines << "set_reg_a 0"
+  alines << "jump end_eq_#{label_id}"
 
   # then
-  codes << "label then_#{label_id}"
-  codes << "set_reg_a 1"
+  alines << "label then_#{label_id}"
+  alines << "set_reg_a 1"
 
-  codes << "label end_eq_#{label_id}"
+  alines << "label end_eq_#{label_id}"
 
-  codes
+  alines
 end
 
 # 結果は reg_a に入れる
 # left > right の場合 true
 def builtin_gt(rest, lvar_names, fn_args)
   left, right = rest
-  codes = []
+  alines = []
   $label_id +=1
   label_id = $label_id
 
-  codes.concat proc_exp_two(left, right, lvar_names, fn_args)
+  alines.concat proc_exp_two(left, right, lvar_names, fn_args)
 
-  codes << "cp reg_d reg_b"
-  codes << "compare_v2"
-  codes << "jump_above then_#{label_id}"
+  alines << "cp reg_d reg_b"
+  alines << "compare_v2"
+  alines << "jump_above then_#{label_id}"
   # else
-  codes << "set_reg_a 0"
-  codes << "jump end_gt_#{label_id}"
+  alines << "set_reg_a 0"
+  alines << "jump end_gt_#{label_id}"
 
   # then
-  codes << "label then_#{label_id}"
-  codes << "set_reg_a 1"
+  alines << "label then_#{label_id}"
+  alines << "set_reg_a 1"
 
-  codes << "label end_gt_#{label_id}"
+  alines << "label end_gt_#{label_id}"
 
-  codes
+  alines
 end
 
 # 結果は reg_a に入れる
 # left < right の場合 true
 def builtin_lt(rest, lvar_names, fn_args)
   left, right = rest
-  codes = []
+  alines = []
   $label_id +=1
   label_id = $label_id
 
-  codes.concat proc_exp_two(left, right, lvar_names, fn_args)
+  alines.concat proc_exp_two(left, right, lvar_names, fn_args)
 
-  codes << "cp reg_d reg_b"
-  codes << "compare_v2"
-  codes << "jump_below then_#{label_id}"
+  alines << "cp reg_d reg_b"
+  alines << "compare_v2"
+  alines << "jump_below then_#{label_id}"
   # else
-  codes << "set_reg_a 0"
-  codes << "jump end_lt_#{label_id}"
+  alines << "set_reg_a 0"
+  alines << "jump end_lt_#{label_id}"
 
   # then
-  codes << "label then_#{label_id}"
-  codes << "set_reg_a 1"
+  alines << "label then_#{label_id}"
+  alines << "set_reg_a 1"
 
-  codes << "label end_lt_#{label_id}"
+  alines << "label end_lt_#{label_id}"
 
-  codes
+  alines
 end
 
 def builtin_neq(rest, lvar_names, fn_args)
   left, right = rest
-  codes = []
+  alines = []
   $label_id +=1
   label_id = $label_id
 
-  codes.concat proc_exp_two(left, right, lvar_names, fn_args)
+  alines.concat proc_exp_two(left, right, lvar_names, fn_args)
 
-  codes << "cp reg_d reg_b"
-  codes << "compare_v2"
-  codes << "jump_eq then_#{label_id}"
+  alines << "cp reg_d reg_b"
+  alines << "compare_v2"
+  alines << "jump_eq then_#{label_id}"
   # else
-  codes << "set_reg_a 1"
-  codes << "jump end_neq_#{label_id}"
+  alines << "set_reg_a 1"
+  alines << "jump end_neq_#{label_id}"
 
   # then
-  codes << "label then_#{label_id}"
-  codes << "set_reg_a 0"
+  alines << "label then_#{label_id}"
+  alines << "set_reg_a 0"
 
-  codes << "label end_neq_#{label_id}"
+  alines << "label end_neq_#{label_id}"
 
-  codes
+  alines
 end
 
 def render_exp(exp, lvar_names, fn_args)
   head, *rest = exp
-  codes = []
+  alines = []
 
   case head
   when "+"
-    codes.concat builtin_add(rest, lvar_names, fn_args)
+    alines.concat builtin_add(rest, lvar_names, fn_args)
   when "-"
-    codes.concat builtin_sub(rest, lvar_names, fn_args)
+    alines.concat builtin_sub(rest, lvar_names, fn_args)
   when "*"
-    codes.concat builtin_mult(rest, lvar_names, fn_args)
+    alines.concat builtin_mult(rest, lvar_names, fn_args)
   when "eq"
-    codes.concat builtin_eq(rest, lvar_names, fn_args)
+    alines.concat builtin_eq(rest, lvar_names, fn_args)
   when "gt"
-    codes.concat builtin_gt(rest, lvar_names, fn_args)
+    alines.concat builtin_gt(rest, lvar_names, fn_args)
   when "lt"
-    codes.concat builtin_lt(rest, lvar_names, fn_args)
+    alines.concat builtin_lt(rest, lvar_names, fn_args)
   when "neq"
-    codes.concat builtin_neq(rest, lvar_names, fn_args)
+    alines.concat builtin_neq(rest, lvar_names, fn_args)
   else
     raise not_yet_impl(head)
   end
 
-  codes
+  alines
 end
 
 def _debug(msg)
@@ -416,23 +419,23 @@ def _debug(msg)
 end
 
 def proc_stmt(tree, fn_names, lvar_names, fn_args)
-  codes = []
+  alines = []
 
   head, *rest = tree
   case head
   when "stmts"
     rest.each{|stmt|
       cds = proc_stmt(stmt, fn_names, lvar_names, fn_args)
-      codes.concat(cds)
+      alines.concat(cds)
     }
   when "func"
     cds = def_func(rest, fn_names)
-    codes.concat(cds)
+    alines.concat(cds)
   when "noop"
-    codes << "noop"
+    alines << "noop"
   when "var"
     # ローカル変数の宣言（スタック確保）
-    codes << "sub sp 1"
+    alines << "sub sp 1"
   when "set" # dest src
     # ローカル変数への代入
 
@@ -441,7 +444,7 @@ def proc_stmt(tree, fn_names, lvar_names, fn_args)
         rest[1]
       elsif rest[1].is_a? Array
         exp = rest[1]
-        codes.concat render_exp(exp, lvar_names, fn_args)
+        alines.concat render_exp(exp, lvar_names, fn_args)
         "reg_a" # 結果を reg_a から回収する
       elsif fn_args.include?(rest[1])
         # pos = 0 ... 1個目の引数
@@ -460,7 +463,7 @@ def proc_stmt(tree, fn_names, lvar_names, fn_args)
         case
         when lvar_names.include?(var_name)
           var_pos = lvar_names.index(var_name) + 1
-          codes << "get_vram [bp-#{var_pos}] reg_a"
+          alines << "get_vram [bp-#{var_pos}] reg_a"
         else
           raise not_yet_impl(var_name)
         end
@@ -475,13 +478,13 @@ def proc_stmt(tree, fn_names, lvar_names, fn_args)
       idx = $1
       case idx
       when /^\d+$/
-        codes << "cp #{src_val} #{var_name}"
+        alines << "cp #{src_val} #{var_name}"
       when /^([a-z_][a-z0-9_]*)$/
         var_name = $1
         case
         when lvar_names.include?(var_name)
           var_pos = lvar_names.index(var_name) + 1
-          codes << "set_vram [bp-#{var_pos}] #{src_val}"
+          alines << "set_vram [bp-#{var_pos}] #{src_val}"
         else
           raise not_yet_impl(var_name)
         end
@@ -490,18 +493,18 @@ def proc_stmt(tree, fn_names, lvar_names, fn_args)
       end
     else
       var_pos = lvar_names.index(var_name) + 1
-      codes << "cp #{src_val} [bp-#{var_pos}]"
+      alines << "cp #{src_val} [bp-#{var_pos}]"
     end
   when "+"
-    codes.concat builtin_add(rest, lvar_names)
+    alines.concat builtin_add(rest, lvar_names)
   when "*"
-    codes.concat builtin_mult(rest, lvar_names)
+    alines.concat builtin_mult(rest, lvar_names)
   when "eq"
-    codes.concat render_exp(tree, lvar_names, fn_args)
+    alines.concat render_exp(tree, lvar_names, fn_args)
   when "gt", "lt"
-    codes.concat render_exp(tree, lvar_names, fn_args)
+    alines.concat render_exp(tree, lvar_names, fn_args)
   when "neq"
-    codes.concat render_exp(tree, lvar_names, fn_args)
+    alines.concat render_exp(tree, lvar_names, fn_args)
   when "return"
     retval = rest[0]
     case
@@ -515,7 +518,7 @@ def proc_stmt(tree, fn_names, lvar_names, fn_args)
         case
         when lvar_names.include?(var_name)
           var_pos = lvar_names.index(var_name) + 1
-          codes << "get_vram [bp-#{var_pos}] reg_a"
+          alines << "get_vram [bp-#{var_pos}] reg_a"
         else
           raise not_yet_impl(var_name)
         end
@@ -524,9 +527,9 @@ def proc_stmt(tree, fn_names, lvar_names, fn_args)
       end
     when lvar_names.include?(retval)
       var_pos = lvar_names.index(retval) + 1
-      codes << "cp [bp-#{var_pos}] reg_a"
+      alines << "cp [bp-#{var_pos}] reg_a"
     else
-      codes << "cp #{retval} reg_a"
+      alines << "cp #{retval} reg_a"
     end
   when "call_set"
     lvar_name = rest[0]
@@ -534,35 +537,35 @@ def proc_stmt(tree, fn_names, lvar_names, fn_args)
       raise "syntax error: rest[1] must be an array"
     end
     fn_name, *tmp_fn_args = rest[1]
-    codes << _debug("-->> call_set " + fn_name)
+    alines << _debug("-->> call_set " + fn_name)
     cds = call_func(fn_name, tmp_fn_args, lvar_names, fn_args)
-    codes.concat(cds)
+    alines.concat(cds)
 
     # 返り値をセット
     lvar_pos = lvar_names.index(lvar_name) + 1
-    codes << "cp reg_a [bp-#{lvar_pos}]"
-    codes << _debug("<<-- call_set " + fn_name)
+    alines << "cp reg_a [bp-#{lvar_pos}]"
+    alines << _debug("<<-- call_set " + fn_name)
   when "call"
     fn_name, *tmp_fn_args = rest
-    codes << _debug("-->> call " + fn_name)
+    alines << _debug("-->> call " + fn_name)
     cds = call_func(fn_name, tmp_fn_args, lvar_names, fn_args)
-    codes.concat(cds)
-    codes << _debug("<<-- call " + fn_name)
+    alines.concat(cds)
+    alines << _debug("<<-- call " + fn_name)
   when "case"
-    codes << _debug("-->> case")
-    codes.concat proc_case(rest, fn_names, lvar_names, fn_args)
-    codes << _debug("<<-- case")
+    alines << _debug("-->> case")
+    alines.concat proc_case(rest, fn_names, lvar_names, fn_args)
+    alines << _debug("<<-- case")
   when "while"
-    codes << _debug("-->> while")
-    codes.concat proc_while(rest, fn_names, lvar_names, fn_args)
-    codes << _debug("<<-- while")
+    alines << _debug("-->> while")
+    alines.concat proc_while(rest, fn_names, lvar_names, fn_args)
+    alines << _debug("<<-- while")
   when "_debug"
-    codes << _debug(rest[0])
+    alines << _debug(rest[0])
   else
     raise "not yet impl (#{tree.inspect})"
   end
 
-  codes
+  alines
 end
 
 def main(args)
@@ -575,15 +578,15 @@ def main(args)
   fn_names = pass1(tree)
   lvar_names = []
 
-  codes = []
-  codes.concat([
+  alines = []
+  alines.concat([
                  "call main",
                  "exit",
                ])
   cds = proc_stmt(tree, fn_names, lvar_names, [])
-  codes.concat(cds)
+  alines.concat(cds)
 
-  puts YAML.dump(codes)
+  puts YAML.dump(alines)
 end
 
 main(ARGV)
