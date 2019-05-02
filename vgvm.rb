@@ -100,13 +100,6 @@ class Memory
     lines.join("\n")
   end
 
-  def dump_arr_v1
-    rows = @vram.each_slice(5).to_a
-    rows.map{|cols|
-      cols.map{|col| col == 1 ? "@" : "." }.join("")
-    }.join("\n")
-  end
-
   def format_cols(cols)
     cols.map{|col| col == 1 ? "@" : "." }.join("")
   end
