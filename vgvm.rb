@@ -78,7 +78,7 @@ class Memory
 
   def dump_stack(sp, bp)
     lines = []
-    @stack.each_with_index{|x, i|
+    @stack.each_with_index do |x, i|
       next if i < sp - 8
       next if i > bp + 8
       head =
@@ -95,7 +95,7 @@ class Memory
           "         "
         end
       lines << head + "#{i} #{x.inspect}"
-    }
+    end
     lines.join("\n")
   end
 

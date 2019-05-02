@@ -10,7 +10,7 @@ list = YAML.load(src)
 label_addr_map = {}
 
 i = 0
-list.each{|line|
+list.each do |line|
   head, *rest = line.split(" ")
   case head
   when "label"
@@ -21,10 +21,10 @@ list.each{|line|
     i += 1 # head の分
     i += rest.size
   end
-}
+end
 
 list2 = []
-list.each{|line|
+list.each do |line|
   head, *rest = line.split(" ")
   case head
   when "label"
@@ -41,7 +41,7 @@ list.each{|line|
     list2 << label_addr_map[rest[0]] + 2
   else
     list2 << head
-    rest.each{|opr|
+    rest.each do |opr|
       list2 <<
         case opr
         when /^\d+$/, /^\-\d+$/
@@ -49,9 +49,9 @@ list.each{|line|
         else
           opr
         end
-    }
+    end
   end
-}
+end
 
 $stderr.puts "size (#{ list2.size })"
 

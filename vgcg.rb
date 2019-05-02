@@ -39,13 +39,13 @@ def def_func(rest, fn_names)
 
   # 本体
   local_var_names_sub = []
-  body.each{|stmt|
+  body.each do |stmt|
     body_codes = proc_stmt(stmt, fn_names, local_var_names_sub, fn_args)
     codes.concat(body_codes)
     if stmt[0] == "var"
       local_var_names_sub << stmt[1]
     end
-  }
+  end
 
   codes << "cp bp sp" # 呼び出し元の bp を pop するために sp を移動
   codes << "pop bp" # 呼び出し元の bp に戻す
@@ -58,7 +58,7 @@ def call_func(fn_name, rest, lvar_names, fn_args)
   codes = []
 
   # 逆順に積む
-  rest.reverse.each{|arg|
+  rest.reverse.each do |arg|
     case arg
     when Integer
       codes << "push #{arg}"
@@ -76,7 +76,7 @@ def call_func(fn_name, rest, lvar_names, fn_args)
     else
       raise not_yet_impl(arg)
     end
-  }
+  end
   codes << "call #{fn_name}"
 
   # 引数の分を戻す
@@ -92,7 +92,7 @@ def proc_case(whens, fn_names, lvar_names, fn_args)
 
   when_idx = -1
   when_bodies = []
-  whens.each{|_when|
+  whens.each do |_when|
     when_idx += 1
     cond, *rest = _when
 
@@ -125,7 +125,7 @@ def proc_case(whens, fn_names, lvar_names, fn_args)
     else
       raise "not yet impl (#{cond_head})"
     end
-  }
+  end
 
   when_bodies.each{|then_stmts|
     then_stmts.each{|stmt|
