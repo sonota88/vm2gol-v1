@@ -354,7 +354,7 @@
 - bp
 - ret
 - label
-- arr_set_buf
+- vram_set_buf
 - push
 - bp
 - cp
@@ -1249,7 +1249,7 @@
 - _debug
 - "@@@@_next_val_を確認"
 - _debug
-- "-->>_call_arr_set_buf"
+- "-->>_call_vram_set_buf"
 - push
 - "[bp-6]"
 - push
@@ -1264,7 +1264,7 @@
 - sp
 - 4
 - _debug
-- "<<--_call_arr_set_buf"
+- "<<--_call_vram_set_buf"
 - cp
 - bp
 - sp
