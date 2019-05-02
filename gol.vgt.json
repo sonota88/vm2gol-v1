@@ -266,11 +266,6 @@
      ,["var", "h"]
      ,["set", "h", 5]
 
-     // ,["call", "arr_set", "w", 0, 0, 1]
-
-     // ,["var", "temp"]
-     // ,["call_set", "temp", ["arr_get", "w", "h", 0, 0]]
-
      // 配列の初期化 5x5, ブリンカー / x, y, val
      // ,["call", "arr_set", "w", 2, 1, 1]
      // ,["call", "arr_set", "w", 2, 2, 1]
@@ -285,43 +280,6 @@
      ,["set", "arr[10]", 1]
      ,["set", "arr[11]", 1]
      ,["set", "arr[12]", 1]
-
-     // lt
-//     ,["call", "arr_set", "w", 4, 4, 1]
-     // t
-//     ,["call", "arr_set", "w", 0, 4, 1]
-     // rt
-//     ,["call", "arr_set", "w", 1, 4, 1]
-     // l
-//     ,["call", "arr_set", "w", 4, 0, 1]
-     // r
-//     ,["call", "arr_set", "w", 1, 0, 1]
-     // lb
-//     ,["call", "arr_set", "w", 4, 1, 1]
-     // b
-//     ,["call", "arr_set", "w", 0, 1, 1]
-     // rb
-//     ,["call", "arr_set", "w", 1, 1, 1]
-
-     // ,["var", "aa"]
-     // ,["call_set", "aa", ["arr_get", "w", 2, 1]]
-     // ,["call_set", "aa", ["arr_get", "w", 1, 1]]
-
-     // ,["case"
-     //   ,[["gt", -1, 0]
-     //     ,["set", "aa", 111]
-     //    ]
-     //   ,[["eq", 1, 1]
-     //     ,["set", "aa", 222]
-     //    ]
-     //  ]
-
-     // ,["set", "arr[24]", 1]
-     // ,["set", "arr[26]", 1]
-     // ,["set", "arr[27]", 1]
-     // ,["set", "arr[28]", 1]
-
-     // ,["call", "arr_get_v2", "w", "h", -1, -1]
 
      // メインループ
      ,["var", "cnt"]
