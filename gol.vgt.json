@@ -30,16 +30,6 @@
   ]
 
  ,["func"
-   ,"arr_get"
-   ,["w", "h", "x", "y"]
-   ,[
-      ["var", "ai"] // array index
-     ,["call_set", "ai", ["to_ai", "w", "x", "y", 0]]
-     ,["return", "arr[ai]"]
-    ]
-  ]
-
- ,["func"
    ,"arr_get_v2"
    ,["w", "h", "x", "y"]
    ,[
