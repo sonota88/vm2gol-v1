@@ -2,7 +2,7 @@
 
  // バッファ配列用
  ,["func"
-   ,"to_ai"
+   ,"to_vi"
    ,["w", "x", "y", "offset"]
    ,[
       ["var", "vi"] // vram index
@@ -60,7 +60,7 @@
      ,["_debug", "---->> arr_get_v2 > ax, ay を確認"]
 
      ,["var", "vi"] // vram index
-     ,["call_set", "vi", ["to_ai", "w", "ax", "ay", 0]]
+     ,["call_set", "vi", ["to_vi", "w", "ax", "ay", 0]]
      ,["return", "vram[vi]"]
     ]
   ]
@@ -70,7 +70,7 @@
    ,["w", "x", "y", "v"]
    ,[
       ["var", "vi"] // vram index
-     ,["call_set", "vi", ["to_ai", "w", "x", "y", 25]]
+     ,["call_set", "vi", ["to_vi", "w", "x", "y", 25]]
      ,["set", "vram[vi]", "v"]
     ]
   ]
@@ -81,7 +81,7 @@
    ,[
       ["var", "vi"] // vram index
      ,["_debug", "57---------"]
-     ,["call_set", "vi", ["to_ai", "w", "x", "y", 25]]
+     ,["call_set", "vi", ["to_vi", "w", "x", "y", 25]]
      ,["return", "vram[vi]"]
     ]
   ]
