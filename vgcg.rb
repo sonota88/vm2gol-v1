@@ -17,7 +17,7 @@ def pass1(tree)
   case head
   when "stmts"
     rest.each{|stmt|
-      fn_names.concat(pass1(stmt))
+      fn_names += pass1(stmt)
     }
   when "func"
     fn_names << rest[0]
@@ -43,8 +43,7 @@ def def_func(rest, fn_names)
   # 本体
   local_var_names_sub = []
   body.each do |stmt|
-    body_codes = proc_stmt(stmt, fn_names, local_var_names_sub, fn_args)
-    alines.concat(body_codes)
+    alines += proc_stmt(stmt, fn_names, local_var_names_sub, fn_args)
     if stmt[0] == "var"
       local_var_names_sub << stmt[1]
     end
@@ -103,7 +102,7 @@ def proc_case(whens, fn_names, lvar_names, fn_args)
     case cond_head
     when "eq", "gt", "lt"
       alines << "label test_#{label_id}_#{when_idx}"
-      alines.concat render_exp(cond, lvar_names, fn_args) #=> 結果は reg_a
+      alines += render_exp(cond, lvar_names, fn_args) #=> 結果は reg_a
       alines << "set_reg_b 1"
       alines << "compare_v2"
 
@@ -121,7 +120,7 @@ def proc_case(whens, fn_names, lvar_names, fn_args)
 
       then_stmts = ["label when_#{label_id}_#{when_idx}"]
       rest.each{|stmt|
-        then_stmts.concat proc_stmt(stmt, fn_names, lvar_names, fn_args)
+        then_stmts += proc_stmt(stmt, fn_names, lvar_names, fn_args)
       }
       then_stmts << "jump end_case_#{label_id}"
       when_bodies << then_stmts
@@ -148,7 +147,7 @@ def proc_while(rest, fn_names, lvar_names, fn_args)
   label_id = $label_id
 
   alines << "label while_#{label_id}"
-  alines.concat render_exp(cond_exp, lvar_names, fn_args)
+  alines += render_exp(cond_exp, lvar_names, fn_args)
   alines << "set_reg_b 1"
   alines << "compare_v2"
   alines << "jump_eq true_#{label_id}"
@@ -159,7 +158,7 @@ def proc_while(rest, fn_names, lvar_names, fn_args)
   # true の場合 body を実行
 
   body.each{|stmt|
-    alines.concat proc_stmt(stmt, fn_names, lvar_names, fn_args)
+    alines += proc_stmt(stmt, fn_names, lvar_names, fn_args)
   }
 
   alines << "jump while_#{label_id}"
@@ -175,12 +174,12 @@ def proc_exp_two(left, right, lvar_names, fn_args)
 
   # 終端でなければ、先に深い方を処理する
   if left.is_a? Array
-    alines.concat render_exp(left, lvar_names)
+    alines += render_exp(left, lvar_names)
     alines << "cp reg_a reg_d" #=> 評価結果を退避 a => d
   end
 
   if right.is_a? Array
-    alines.concat render_exp(right, lvar_names)
+    alines += render_exp(right, lvar_names)
     # 評価結果は a に入ってる
   end
 
@@ -235,7 +234,7 @@ def builtin_add(rest, lvar_names, fn_args)
   left, right = rest
   alines = []
 
-  alines.concat proc_exp_two(left, right, lvar_names, fn_args)
+  alines += proc_exp_two(left, right, lvar_names, fn_args)
 
   alines << "cp reg_d reg_b"
   alines << "add_ab_v2" #=> reg_a に入る
@@ -248,7 +247,7 @@ def builtin_sub(rest, lvar_names, fn_args)
   left, right = rest
   alines = []
 
-  alines.concat proc_exp_two(left, right, lvar_names, fn_args)
+  alines += proc_exp_two(left, right, lvar_names, fn_args)
 
   # きれいではないが a - b となるように入れ替え
   # 加算のときは順番関係ないので問題に気づけてなかった…
@@ -266,7 +265,7 @@ def builtin_mult(rest, lvar_names)
   left, right = rest
   alines = []
 
-  alines.concat proc_exp_two(left, right, lvar_names)
+  alines += proc_exp_two(left, right, lvar_names)
 
   alines << "cp reg_d reg_b"
   alines << "mult_ab" #=> reg_a に入る
@@ -279,7 +278,7 @@ def builtin_mult(rest, lvar_names, fn_args)
   left, right = rest
   alines = []
 
-  alines.concat proc_exp_two(left, right, lvar_names, fn_args)
+  alines += proc_exp_two(left, right, lvar_names, fn_args)
 
   alines << "cp reg_d reg_b"
   alines << "mult_ab"
@@ -294,7 +293,7 @@ def builtin_eq(rest, lvar_names, fn_args)
   $label_id +=1
   label_id = $label_id
 
-  alines.concat proc_exp_two(left, right, lvar_names, fn_args)
+  alines += proc_exp_two(left, right, lvar_names, fn_args)
 
   alines << "cp reg_d reg_b"
   alines << "compare_v2"
@@ -320,7 +319,7 @@ def builtin_gt(rest, lvar_names, fn_args)
   $label_id +=1
   label_id = $label_id
 
-  alines.concat proc_exp_two(left, right, lvar_names, fn_args)
+  alines += proc_exp_two(left, right, lvar_names, fn_args)
 
   alines << "cp reg_d reg_b"
   alines << "compare_v2"
@@ -346,7 +345,7 @@ def builtin_lt(rest, lvar_names, fn_args)
   $label_id +=1
   label_id = $label_id
 
-  alines.concat proc_exp_two(left, right, lvar_names, fn_args)
+  alines += proc_exp_two(left, right, lvar_names, fn_args)
 
   alines << "cp reg_d reg_b"
   alines << "compare_v2"
@@ -370,7 +369,7 @@ def builtin_neq(rest, lvar_names, fn_args)
   $label_id +=1
   label_id = $label_id
 
-  alines.concat proc_exp_two(left, right, lvar_names, fn_args)
+  alines += proc_exp_two(left, right, lvar_names, fn_args)
 
   alines << "cp reg_d reg_b"
   alines << "compare_v2"
@@ -394,19 +393,19 @@ def render_exp(exp, lvar_names, fn_args)
 
   case head
   when "+"
-    alines.concat builtin_add(rest, lvar_names, fn_args)
+    alines += builtin_add(rest, lvar_names, fn_args)
   when "-"
-    alines.concat builtin_sub(rest, lvar_names, fn_args)
+    alines += builtin_sub(rest, lvar_names, fn_args)
   when "*"
-    alines.concat builtin_mult(rest, lvar_names, fn_args)
+    alines += builtin_mult(rest, lvar_names, fn_args)
   when "eq"
-    alines.concat builtin_eq(rest, lvar_names, fn_args)
+    alines += builtin_eq(rest, lvar_names, fn_args)
   when "gt"
-    alines.concat builtin_gt(rest, lvar_names, fn_args)
+    alines += builtin_gt(rest, lvar_names, fn_args)
   when "lt"
-    alines.concat builtin_lt(rest, lvar_names, fn_args)
+    alines += builtin_lt(rest, lvar_names, fn_args)
   when "neq"
-    alines.concat builtin_neq(rest, lvar_names, fn_args)
+    alines += builtin_neq(rest, lvar_names, fn_args)
   else
     raise not_yet_impl(head)
   end
@@ -425,12 +424,10 @@ def proc_stmt(tree, fn_names, lvar_names, fn_args)
   case head
   when "stmts"
     rest.each{|stmt|
-      cds = proc_stmt(stmt, fn_names, lvar_names, fn_args)
-      alines.concat(cds)
+      alines += proc_stmt(stmt, fn_names, lvar_names, fn_args)
     }
   when "func"
-    cds = def_func(rest, fn_names)
-    alines.concat(cds)
+    alines += def_func(rest, fn_names)
   when "noop"
     alines << "noop"
   when "var"
@@ -444,7 +441,7 @@ def proc_stmt(tree, fn_names, lvar_names, fn_args)
         rest[1]
       elsif rest[1].is_a? Array
         exp = rest[1]
-        alines.concat render_exp(exp, lvar_names, fn_args)
+        alines += render_exp(exp, lvar_names, fn_args)
         "reg_a" # 結果を reg_a から回収する
       elsif fn_args.include?(rest[1])
         # pos = 0 ... 1個目の引数
@@ -496,15 +493,15 @@ def proc_stmt(tree, fn_names, lvar_names, fn_args)
       alines << "cp #{src_val} [bp-#{var_pos}]"
     end
   when "+"
-    alines.concat builtin_add(rest, lvar_names)
+    alines += builtin_add(rest, lvar_names)
   when "*"
-    alines.concat builtin_mult(rest, lvar_names)
+    alines += builtin_mult(rest, lvar_names)
   when "eq"
-    alines.concat render_exp(tree, lvar_names, fn_args)
+    alines += render_exp(tree, lvar_names, fn_args)
   when "gt", "lt"
-    alines.concat render_exp(tree, lvar_names, fn_args)
+    alines += render_exp(tree, lvar_names, fn_args)
   when "neq"
-    alines.concat render_exp(tree, lvar_names, fn_args)
+    alines += render_exp(tree, lvar_names, fn_args)
   when "return"
     retval = rest[0]
     case
@@ -538,8 +535,7 @@ def proc_stmt(tree, fn_names, lvar_names, fn_args)
     end
     fn_name, *tmp_fn_args = rest[1]
     alines << _debug("-->> call_set " + fn_name)
-    cds = call_func(fn_name, tmp_fn_args, lvar_names, fn_args)
-    alines.concat(cds)
+    alines += call_func(fn_name, tmp_fn_args, lvar_names, fn_args)
 
     # 返り値をセット
     lvar_pos = lvar_names.index(lvar_name) + 1
@@ -548,16 +544,15 @@ def proc_stmt(tree, fn_names, lvar_names, fn_args)
   when "call"
     fn_name, *tmp_fn_args = rest
     alines << _debug("-->> call " + fn_name)
-    cds = call_func(fn_name, tmp_fn_args, lvar_names, fn_args)
-    alines.concat(cds)
+    alines += call_func(fn_name, tmp_fn_args, lvar_names, fn_args)
     alines << _debug("<<-- call " + fn_name)
   when "case"
     alines << _debug("-->> case")
-    alines.concat proc_case(rest, fn_names, lvar_names, fn_args)
+    alines += proc_case(rest, fn_names, lvar_names, fn_args)
     alines << _debug("<<-- case")
   when "while"
     alines << _debug("-->> while")
-    alines.concat proc_while(rest, fn_names, lvar_names, fn_args)
+    alines += proc_while(rest, fn_names, lvar_names, fn_args)
     alines << _debug("<<-- while")
   when "_debug"
     alines << _debug(rest[0])
@@ -579,12 +574,11 @@ def main(args)
   lvar_names = []
 
   alines = []
-  alines.concat([
+  alines += [
                  "call main",
                  "exit",
-               ])
-  cds = proc_stmt(tree, fn_names, lvar_names, [])
-  alines.concat(cds)
+               ]
+  alines += proc_stmt(tree, fn_names, lvar_names, [])
 
   puts YAML.dump(alines)
 end
