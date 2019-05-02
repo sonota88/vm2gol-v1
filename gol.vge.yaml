@@ -129,7 +129,7 @@
 - "[bp-1]"
 - _debug
 - "<<--_call_set_to_ai"
-- get_arr
+- get_vram
 - "[bp-1]"
 - reg_a
 - cp
@@ -422,7 +422,7 @@
 - "[bp-3]"
 - _debug
 - "<<--_call_set_to_ai"
-- get_arr
+- get_vram
 - "[bp-3]"
 - reg_a
 - cp
@@ -502,7 +502,7 @@
 - "[bp-1]"
 - _debug
 - "<<--_call_set_to_ai"
-- get_arr
+- get_vram
 - "[bp-1]"
 - reg_a
 - cp
@@ -748,7 +748,7 @@
 - cp
 - reg_a
 - "[bp-2]"
-- get_arr
+- get_vram
 - "[bp-2]"
 - reg_a
 - cp
