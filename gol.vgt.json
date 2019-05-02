@@ -6,16 +6,16 @@
    ,["w", "x", "y", "offset"]
    ,[
       ["var", "vi"] // vram index
-     ,["var", "ai_buf"]
+     ,["var", "vi_buf"]
 
      // ai = (+ (* y w) x)
      ,["var", "yw"]
      ,["set", "yw", ["*", "y", "w"]]
 
      ,["set" ,"vi" ,["+" ,"yw" ,"x"]]
-     ,["set" ,"ai_buf" ,["+" ,"vi" , "offset"]]
+     ,["set" ,"vi_buf" ,["+" ,"vi" , "offset"]]
 
-     ,["return", "ai_buf"]
+     ,["return", "vi_buf"]
     ]
   ]
 
@@ -93,8 +93,8 @@
       ["var", "vi"]
      ,["set", "vi", 0]
 
-     ,["var", "ai_buf"]
-     ,["set", "ai_buf", 0]
+     ,["var", "vi_buf"]
+     ,["set", "vi_buf", 0]
 
      ,["var", "temp"]
 
@@ -102,9 +102,9 @@
        ,[
           ["_debug", "____loop_ai"]
 
-         ,["set", "ai_buf", ["+", "vi", 25]]
+         ,["set", "vi_buf", ["+", "vi", 25]]
 
-         ,["set", "temp", "vram[ai_buf]"]
+         ,["set", "temp", "vram[vi_buf]"]
          ,["set", "vram[vi]", "temp"]
 
          ,["set", "vi", ["+", "vi", 1]]
