@@ -662,11 +662,11 @@
 - cp 5 [bp-1]
 - sub sp 1
 - cp 5 [bp-2]
-- cp 1 arr[1]
-- cp 1 arr[7]
-- cp 1 arr[10]
-- cp 1 arr[11]
-- cp 1 arr[12]
+- cp 1 vram[1]
+- cp 1 vram[7]
+- cp 1 vram[10]
+- cp 1 vram[11]
+- cp 1 vram[12]
 - sub sp 1
 - _debug -->>_while
 - label while_22
