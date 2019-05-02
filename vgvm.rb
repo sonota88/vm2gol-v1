@@ -541,7 +541,7 @@ class Computer
 
 end
 
-bin_file = ARGV[0]
+exe_file = ARGV[0]
 
 computer = Computer.new
-computer.start(bin_file)
+computer.start(exe_file)
