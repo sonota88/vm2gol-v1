@@ -66,7 +66,7 @@
   ]
 
  ,["func"
-   ,"arr_set_buf"
+   ,"vram_set_buf"
    ,["w", "x", "y", "v"]
    ,[
       ["var", "vi"] // vram index
@@ -222,7 +222,7 @@
 
    ,["_debug", "@@@@ next_val を確認"]
 
-   ,["call", "arr_set_buf", "w", "x", "y", "next_val"]
+   ,["call", "vram_set_buf", "w", "x", "y", "next_val"]
   ]]
 
  ,["func", "gen_next_step_loop", ["w"], [
