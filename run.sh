@@ -9,4 +9,4 @@ exe_file="${bname}.vge.yaml"
 
 ruby orecc.rb $clike_file > $asm_file
 ruby oreasm.rb $asm_file > $exe_file
-ruby orevm.rb $exe_file
+ruby vgvm.rb $exe_file
