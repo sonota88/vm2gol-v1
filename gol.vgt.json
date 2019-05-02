@@ -20,15 +20,15 @@
   ]
 
  ,["func"
-   ,"arr_get_v2"
+   ,"vram_get_v2"
    ,["w", "h", "x", "y"]
    ,[
-     ["_debug", "---->> arr_get_v2"],
+     ["_debug", "---->> vram_get_v2"],
      // actual x, y
      ["var", "ax"]
      ,["var", "ay"]
 
-     ,["_debug", "---->> arr_get_v2 > adjust x"]
+     ,["_debug", "---->> vram_get_v2 > adjust x"]
      ,["case"
        ,[["lt", "x", 0]
          // TODO w - 1
@@ -43,7 +43,7 @@
          ,["set", "ax", "x"]]
       ]
 
-     ,["_debug", "---->> arr_get_v2 > adjust y"]
+     ,["_debug", "---->> vram_get_v2 > adjust y"]
      ,["case"
        ,[["lt", "y", 0]
          ,["_debug", "---->> y-1"]
@@ -57,7 +57,7 @@
          ,["_debug", "---->> y-3"]
          ,["set", "ay", "y"]]
       ]
-     ,["_debug", "---->> arr_get_v2 > ax, ay を確認"]
+     ,["_debug", "---->> vram_get_v2 > ax, ay を確認"]
 
      ,["var", "vi"] // vram index
      ,["call_set", "vi", ["to_vi", "w", "ax", "ay", 0]]
@@ -128,7 +128,7 @@
 
    // 20
    ,["var", "current_val"]
-   ,["call_set", "current_val", ["arr_get_v2", 5, 5, "x", "y"]]
+   ,["call_set", "current_val", ["vram_get_v2", 5, 5, "x", "y"]]
 
    // 19
    ,["var", "next_val"]
@@ -138,7 +138,7 @@
    ,["_debug", "-->> lt"]
    ,["set", "tx", ["-", "x", 1]]
    ,["set", "ty", ["-", "y", 1]]
-   ,["call_set", "val", ["arr_get_v2", 5, 5, "tx", "ty"]]
+   ,["call_set", "val", ["vram_get_v2", 5, 5, "tx", "ty"]]
    ,["set", "num_alive", ["+", "num_alive", "val"]]
    ,["_debug", "<<-- lt"]
 
@@ -146,7 +146,7 @@
    ,["_debug", "-->> t"]
    ,["set", "tx", "x"]
    ,["set", "ty", ["-", "y", 1]]
-   ,["call_set", "val", ["arr_get_v2", 5, 5, "tx", "ty"]]
+   ,["call_set", "val", ["vram_get_v2", 5, 5, "tx", "ty"]]
    ,["set", "num_alive", ["+", "num_alive", "val"]]
    ,["_debug", "<<-- t"]
 
@@ -154,7 +154,7 @@
    ,["_debug", "-->> rt"]
    ,["set", "tx", ["+", "x", 1]]
    ,["set", "ty", ["-", "y", 1]]
-   ,["call_set", "val", ["arr_get_v2", 5, 5, "tx", "ty"]]
+   ,["call_set", "val", ["vram_get_v2", 5, 5, "tx", "ty"]]
    ,["set", "num_alive", ["+", "num_alive", "val"]]
    ,["_debug", "<<-- rt"]
 
@@ -162,7 +162,7 @@
    ,["_debug", "-->> l"]
    ,["set", "tx", ["-", "x", 1]]
    ,["set", "ty", "y"]
-   ,["call_set", "val", ["arr_get_v2", 5, 5, "tx", "ty"]]
+   ,["call_set", "val", ["vram_get_v2", 5, 5, "tx", "ty"]]
    ,["set", "num_alive", ["+", "num_alive", "val"]]
    ,["_debug", "<<-- l"]
 
@@ -170,7 +170,7 @@
    ,["_debug", "-->> r"]
    ,["set", "tx", ["+", "x", 1]]
    ,["set", "ty", "y"]
-   ,["call_set", "val", ["arr_get_v2", 5, 5, "tx", "ty"]]
+   ,["call_set", "val", ["vram_get_v2", 5, 5, "tx", "ty"]]
    ,["set", "num_alive", ["+", "num_alive", "val"]]
    ,["_debug", "<<-- r"]
 
@@ -178,7 +178,7 @@
    ,["_debug", "-->> lb"]
    ,["set", "tx", ["-", "x", 1]]
    ,["set", "ty", ["+", "y", 1]]
-   ,["call_set", "val", ["arr_get_v2", 5, 5, "tx", "ty"]]
+   ,["call_set", "val", ["vram_get_v2", 5, 5, "tx", "ty"]]
    ,["set", "num_alive", ["+", "num_alive", "val"]]
    ,["_debug", "<<-- lb"]
 
@@ -186,7 +186,7 @@
    ,["_debug", "-->> b"]
    ,["set", "tx", "x"]
    ,["set", "ty", ["+", "y", 1]]
-   ,["call_set", "val", ["arr_get_v2", 5, 5, "tx", "ty"]]
+   ,["call_set", "val", ["vram_get_v2", 5, 5, "tx", "ty"]]
    ,["set", "num_alive", ["+", "num_alive", "val"]]
    ,["_debug", "<<-- b"]
 
@@ -194,7 +194,7 @@
    ,["_debug", "-->> rb"]
    ,["set", "tx", ["+", "x", 1]]
    ,["set", "ty", ["+", "y", 1]]
-   ,["call_set", "val", ["arr_get_v2", 5, 5, "tx", "ty"]]
+   ,["call_set", "val", ["vram_get_v2", 5, 5, "tx", "ty"]]
    ,["set", "num_alive", ["+", "num_alive", "val"]]
    ,["_debug", "<<-- rb"]
 
