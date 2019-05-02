@@ -222,9 +222,6 @@ class Cpu
       when "jump"
         addr = @mem.main[@ip + 1]
         @ip = addr
-      when "compare"
-        compare()
-        @ip += 1
       when "compare_v2"
         compare_v2()
         @ip += 1
@@ -487,10 +484,6 @@ class Cpu
 
   def set_reg_d(n)
     @reg_d = n
-  end
-
-  def compare
-    @zf = (@reg_a == @reg_b ? 1 : 0)
   end
 
   def compare_v2
