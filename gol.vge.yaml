@@ -61,14 +61,14 @@
 - bp
 - ret
 - label
-- arr_get_v2
+- vram_get_v2
 - push
 - bp
 - cp
 - sp
 - bp
 - _debug
-- "---->>_arr_get_v2"
+- "---->>_vram_get_v2"
 - sub
 - sp
 - 1
@@ -76,7 +76,7 @@
 - sp
 - 1
 - _debug
-- "---->>_arr_get_v2_>_adjust_x"
+- "---->>_vram_get_v2_>_adjust_x"
 - _debug
 - "-->>_case"
 - label
@@ -198,7 +198,7 @@
 - _debug
 - "<<--_case"
 - _debug
-- "---->>_arr_get_v2_>_adjust_y"
+- "---->>_vram_get_v2_>_adjust_y"
 - _debug
 - "-->>_case"
 - label
@@ -320,7 +320,7 @@
 - _debug
 - "<<--_case"
 - _debug
-- "---->>_arr_get_v2_>_ax,_ay_を確認"
+- "---->>_vram_get_v2_>_ax,_ay_を確認"
 - sub
 - sp
 - 1
@@ -559,7 +559,7 @@
 - sp
 - 1
 - _debug
-- "-->>_call_set_arr_get_v2"
+- "-->>_call_set_vram_get_v2"
 - push
 - "[bp+4]"
 - push
@@ -577,7 +577,7 @@
 - reg_a
 - "[bp-5]"
 - _debug
-- "<<--_call_set_arr_get_v2"
+- "<<--_call_set_vram_get_v2"
 - sub
 - sp
 - 1
@@ -621,7 +621,7 @@
 - reg_a
 - "[bp-2]"
 - _debug
-- "-->>_call_set_arr_get_v2"
+- "-->>_call_set_vram_get_v2"
 - push
 - "[bp-2]"
 - push
@@ -639,7 +639,7 @@
 - reg_a
 - "[bp-3]"
 - _debug
-- "<<--_call_set_arr_get_v2"
+- "<<--_call_set_vram_get_v2"
 - set_reg_d
 - "[bp-4]"
 - set_reg_a
@@ -676,7 +676,7 @@
 - reg_a
 - "[bp-2]"
 - _debug
-- "-->>_call_set_arr_get_v2"
+- "-->>_call_set_vram_get_v2"
 - push
 - "[bp-2]"
 - push
@@ -694,7 +694,7 @@
 - reg_a
 - "[bp-3]"
 - _debug
-- "<<--_call_set_arr_get_v2"
+- "<<--_call_set_vram_get_v2"
 - set_reg_d
 - "[bp-4]"
 - set_reg_a
@@ -739,7 +739,7 @@
 - reg_a
 - "[bp-2]"
 - _debug
-- "-->>_call_set_arr_get_v2"
+- "-->>_call_set_vram_get_v2"
 - push
 - "[bp-2]"
 - push
@@ -757,7 +757,7 @@
 - reg_a
 - "[bp-3]"
 - _debug
-- "<<--_call_set_arr_get_v2"
+- "<<--_call_set_vram_get_v2"
 - set_reg_d
 - "[bp-4]"
 - set_reg_a
@@ -794,7 +794,7 @@
 - "[bp+4]"
 - "[bp-2]"
 - _debug
-- "-->>_call_set_arr_get_v2"
+- "-->>_call_set_vram_get_v2"
 - push
 - "[bp-2]"
 - push
@@ -812,7 +812,7 @@
 - reg_a
 - "[bp-3]"
 - _debug
-- "<<--_call_set_arr_get_v2"
+- "<<--_call_set_vram_get_v2"
 - set_reg_d
 - "[bp-4]"
 - set_reg_a
@@ -843,7 +843,7 @@
 - "[bp+4]"
 - "[bp-2]"
 - _debug
-- "-->>_call_set_arr_get_v2"
+- "-->>_call_set_vram_get_v2"
 - push
 - "[bp-2]"
 - push
@@ -861,7 +861,7 @@
 - reg_a
 - "[bp-3]"
 - _debug
-- "<<--_call_set_arr_get_v2"
+- "<<--_call_set_vram_get_v2"
 - set_reg_d
 - "[bp-4]"
 - set_reg_a
@@ -906,7 +906,7 @@
 - reg_a
 - "[bp-2]"
 - _debug
-- "-->>_call_set_arr_get_v2"
+- "-->>_call_set_vram_get_v2"
 - push
 - "[bp-2]"
 - push
@@ -924,7 +924,7 @@
 - reg_a
 - "[bp-3]"
 - _debug
-- "<<--_call_set_arr_get_v2"
+- "<<--_call_set_vram_get_v2"
 - set_reg_d
 - "[bp-4]"
 - set_reg_a
@@ -955,7 +955,7 @@
 - reg_a
 - "[bp-2]"
 - _debug
-- "-->>_call_set_arr_get_v2"
+- "-->>_call_set_vram_get_v2"
 - push
 - "[bp-2]"
 - push
@@ -973,7 +973,7 @@
 - reg_a
 - "[bp-3]"
 - _debug
-- "<<--_call_set_arr_get_v2"
+- "<<--_call_set_vram_get_v2"
 - set_reg_d
 - "[bp-4]"
 - set_reg_a
@@ -1012,7 +1012,7 @@
 - reg_a
 - "[bp-2]"
 - _debug
-- "-->>_call_set_arr_get_v2"
+- "-->>_call_set_vram_get_v2"
 - push
 - "[bp-2]"
 - push
@@ -1030,7 +1030,7 @@
 - reg_a
 - "[bp-3]"
 - _debug
-- "<<--_call_set_arr_get_v2"
+- "<<--_call_set_vram_get_v2"
 - set_reg_d
 - "[bp-4]"
 - set_reg_a

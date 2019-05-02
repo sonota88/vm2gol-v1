@@ -26,13 +26,13 @@
 - cp bp sp
 - pop bp
 - ret
-- label arr_get_v2
+- label vram_get_v2
 - push bp
 - cp sp bp
-- _debug ---->>_arr_get_v2
+- _debug ---->>_vram_get_v2
 - sub sp 1
 - sub sp 1
-- _debug ---->>_arr_get_v2_>_adjust_x
+- _debug ---->>_vram_get_v2_>_adjust_x
 - _debug -->>_case
 - label test_1_0
 - set_reg_d [bp+4]
@@ -93,7 +93,7 @@
 - jump end_case_1
 - label end_case_1
 - _debug <<--_case
-- _debug ---->>_arr_get_v2_>_adjust_y
+- _debug ---->>_vram_get_v2_>_adjust_y
 - _debug -->>_case
 - label test_5_0
 - set_reg_d [bp+5]
@@ -154,7 +154,7 @@
 - jump end_case_5
 - label end_case_5
 - _debug <<--_case
-- _debug ---->>_arr_get_v2_>_ax,_ay_を確認
+- _debug ---->>_vram_get_v2_>_ax,_ay_を確認
 - sub sp 1
 - _debug -->>_call_set_to_vi
 - push 0
@@ -258,15 +258,15 @@
 - sub sp 1
 - cp 0 [bp-4]
 - sub sp 1
-- _debug -->>_call_set_arr_get_v2
+- _debug -->>_call_set_vram_get_v2
 - push [bp+4]
 - push [bp+3]
 - push 5
 - push 5
-- call arr_get_v2
+- call vram_get_v2
 - add sp 4
 - cp reg_a [bp-5]
-- _debug <<--_call_set_arr_get_v2
+- _debug <<--_call_set_vram_get_v2
 - sub sp 1
 - cp 99 [bp-6]
 - _debug -->>_lt
@@ -284,15 +284,15 @@
 - cp reg_c reg_b
 - sub_ab
 - cp reg_a [bp-2]
-- _debug -->>_call_set_arr_get_v2
+- _debug -->>_call_set_vram_get_v2
 - push [bp-2]
 - push [bp-1]
 - push 5
 - push 5
-- call arr_get_v2
+- call vram_get_v2
 - add sp 4
 - cp reg_a [bp-3]
-- _debug <<--_call_set_arr_get_v2
+- _debug <<--_call_set_vram_get_v2
 - set_reg_d [bp-4]
 - set_reg_a [bp-3]
 - cp reg_d reg_b
@@ -308,15 +308,15 @@
 - cp reg_c reg_b
 - sub_ab
 - cp reg_a [bp-2]
-- _debug -->>_call_set_arr_get_v2
+- _debug -->>_call_set_vram_get_v2
 - push [bp-2]
 - push [bp-1]
 - push 5
 - push 5
-- call arr_get_v2
+- call vram_get_v2
 - add sp 4
 - cp reg_a [bp-3]
-- _debug <<--_call_set_arr_get_v2
+- _debug <<--_call_set_vram_get_v2
 - set_reg_d [bp-4]
 - set_reg_a [bp-3]
 - cp reg_d reg_b
@@ -336,15 +336,15 @@
 - cp reg_c reg_b
 - sub_ab
 - cp reg_a [bp-2]
-- _debug -->>_call_set_arr_get_v2
+- _debug -->>_call_set_vram_get_v2
 - push [bp-2]
 - push [bp-1]
 - push 5
 - push 5
-- call arr_get_v2
+- call vram_get_v2
 - add sp 4
 - cp reg_a [bp-3]
-- _debug <<--_call_set_arr_get_v2
+- _debug <<--_call_set_vram_get_v2
 - set_reg_d [bp-4]
 - set_reg_a [bp-3]
 - cp reg_d reg_b
@@ -360,15 +360,15 @@
 - sub_ab
 - cp reg_a [bp-1]
 - cp [bp+4] [bp-2]
-- _debug -->>_call_set_arr_get_v2
+- _debug -->>_call_set_vram_get_v2
 - push [bp-2]
 - push [bp-1]
 - push 5
 - push 5
-- call arr_get_v2
+- call vram_get_v2
 - add sp 4
 - cp reg_a [bp-3]
-- _debug <<--_call_set_arr_get_v2
+- _debug <<--_call_set_vram_get_v2
 - set_reg_d [bp-4]
 - set_reg_a [bp-3]
 - cp reg_d reg_b
@@ -382,15 +382,15 @@
 - add_ab_v2
 - cp reg_a [bp-1]
 - cp [bp+4] [bp-2]
-- _debug -->>_call_set_arr_get_v2
+- _debug -->>_call_set_vram_get_v2
 - push [bp-2]
 - push [bp-1]
 - push 5
 - push 5
-- call arr_get_v2
+- call vram_get_v2
 - add sp 4
 - cp reg_a [bp-3]
-- _debug <<--_call_set_arr_get_v2
+- _debug <<--_call_set_vram_get_v2
 - set_reg_d [bp-4]
 - set_reg_a [bp-3]
 - cp reg_d reg_b
@@ -410,15 +410,15 @@
 - cp reg_d reg_b
 - add_ab_v2
 - cp reg_a [bp-2]
-- _debug -->>_call_set_arr_get_v2
+- _debug -->>_call_set_vram_get_v2
 - push [bp-2]
 - push [bp-1]
 - push 5
 - push 5
-- call arr_get_v2
+- call vram_get_v2
 - add sp 4
 - cp reg_a [bp-3]
-- _debug <<--_call_set_arr_get_v2
+- _debug <<--_call_set_vram_get_v2
 - set_reg_d [bp-4]
 - set_reg_a [bp-3]
 - cp reg_d reg_b
@@ -432,15 +432,15 @@
 - cp reg_d reg_b
 - add_ab_v2
 - cp reg_a [bp-2]
-- _debug -->>_call_set_arr_get_v2
+- _debug -->>_call_set_vram_get_v2
 - push [bp-2]
 - push [bp-1]
 - push 5
 - push 5
-- call arr_get_v2
+- call vram_get_v2
 - add sp 4
 - cp reg_a [bp-3]
-- _debug <<--_call_set_arr_get_v2
+- _debug <<--_call_set_vram_get_v2
 - set_reg_d [bp-4]
 - set_reg_a [bp-3]
 - cp reg_d reg_b
@@ -458,15 +458,15 @@
 - cp reg_d reg_b
 - add_ab_v2
 - cp reg_a [bp-2]
-- _debug -->>_call_set_arr_get_v2
+- _debug -->>_call_set_vram_get_v2
 - push [bp-2]
 - push [bp-1]
 - push 5
 - push 5
-- call arr_get_v2
+- call vram_get_v2
 - add sp 4
 - cp reg_a [bp-3]
-- _debug <<--_call_set_arr_get_v2
+- _debug <<--_call_set_vram_get_v2
 - set_reg_d [bp-4]
 - set_reg_a [bp-3]
 - cp reg_d reg_b
