@@ -3,7 +3,7 @@
 set -o errexit
 
 clike_file="$1"
-bname=$(basename $clike_file .oc.json)
+bname=$(basename $clike_file .vgt.json)
 asm_file="${bname}.oa.yaml"
 bin_file="${bname}.ob.yaml"
 
