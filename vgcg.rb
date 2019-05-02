@@ -140,7 +140,6 @@ end
 
 def proc_while(rest, fn_names, lvar_names, fn_args)
   cond_exp, body = rest
-  # p_e [119, cond_exp, body]
   codes = []
   $label_id += 1
   label_id = $label_id
@@ -156,7 +155,6 @@ def proc_while(rest, fn_names, lvar_names, fn_args)
   codes << "label true_#{label_id}"
   # true の場合 body を実行
 
-  # p_e [135, body]
   body.each{|stmt|
     codes.concat proc_stmt(stmt, fn_names, lvar_names, fn_args)
   }
@@ -577,7 +575,6 @@ def main(args)
   fn_names = pass1(tree)
   lvar_names = []
 
-  # pp tree
   codes = []
   codes.concat([
                  "call main",
@@ -585,7 +582,7 @@ def main(args)
                ])
   cds = proc_stmt(tree, fn_names, lvar_names, [])
   codes.concat(cds)
-  # pp codes
+
   puts YAML.dump(codes)
 end
 

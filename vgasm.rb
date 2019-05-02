@@ -6,8 +6,6 @@ src = File.read(ARGV[0])
 
 list = YAML.load(src)
 
-# pp list
-
 # ラベル名とアドレスのマッピングを作成
 label_addr_map = {}
 
@@ -24,8 +22,6 @@ list.each{|line|
     i += rest.size
   end
 }
-
-# pp label_addr_map
 
 list2 = []
 list.each{|line|

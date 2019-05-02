@@ -17,7 +17,6 @@ class Memory
   MAIN_DUMP_WIDTH = 30
 
   def initialize(stack_size)
-    # @mem = Array.new(8, 0)
     @main = []
 
     @stack = Array.new(stack_size, nil)
