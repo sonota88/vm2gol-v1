@@ -447,33 +447,6 @@ class Cpu
     ].join(" ")
   end
 
-  def copy_mem_to_reg_a(mem_addr)
-    @reg_a = @mem.main[mem_addr]
-  end
-
-  def copy_mem_to_reg_b(mem_addr)
-    @reg_b = @mem.main[mem_addr]
-  end
-
-  def copy_reg_c_to_mem(mem_addr)
-    @mem.main[mem_addr] = @reg_c
-  end
-
-  def set_mem(addr, n)
-    @mem.main[addr] = n
-  end
-
-  def add_a_b
-    temp = @reg_a + @reg_b
-    if temp >= 16
-      @reg_c = temp - 16
-      @of = 1
-    else
-      @reg_c = temp
-      @of = 0
-    end
-  end
-
   def set_reg_a(n)
     @reg_a = n
   end
