@@ -140,7 +140,7 @@ def render_case(whens, fn_names, lvar_names, fn_args)
   alines
 end
 
-def proc_while(rest, fn_names, lvar_names, fn_args)
+def render_while(rest, fn_names, lvar_names, fn_args)
   cond_exp, body = rest
   alines = []
   $label_id += 1
@@ -539,7 +539,7 @@ def proc_stmt(tree, fn_names, lvar_names, fn_args)
     alines << _debug("<<-- case")
   when "while"
     alines << _debug("-->> while")
-    alines += proc_while(rest, fn_names, lvar_names, fn_args)
+    alines += render_while(rest, fn_names, lvar_names, fn_args)
     alines << _debug("<<-- while")
   when "_debug"
     alines << _debug(rest[0])
