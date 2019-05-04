@@ -43,7 +43,7 @@ def render_func_def(rest, fn_names)
   # 本体
   local_var_names_sub = []
   body.each do |stmt|
-    alines += proc_stmt(stmt, fn_names, local_var_names_sub, fn_args)
+    alines += render_stmt(stmt, fn_names, local_var_names_sub, fn_args)
     if stmt[0] == "var"
       local_var_names_sub << stmt[1]
     end
@@ -120,7 +120,7 @@ def render_case(whens, fn_names, lvar_names, fn_args)
 
       then_stmts = ["label when_#{label_id}_#{when_idx}"]
       rest.each{|stmt|
-        then_stmts += proc_stmt(stmt, fn_names, lvar_names, fn_args)
+        then_stmts += render_stmt(stmt, fn_names, lvar_names, fn_args)
       }
       then_stmts << "jump end_case_#{label_id}"
       when_bodies << then_stmts
@@ -158,7 +158,7 @@ def render_while(rest, fn_names, lvar_names, fn_args)
   # true の場合 body を実行
 
   body.each{|stmt|
-    alines += proc_stmt(stmt, fn_names, lvar_names, fn_args)
+    alines += render_stmt(stmt, fn_names, lvar_names, fn_args)
   }
 
   alines << "jump while_#{label_id}"
@@ -404,14 +404,14 @@ def _debug(msg)
   "_debug " + msg.gsub(" ", "_")
 end
 
-def proc_stmt(tree, fn_names, lvar_names, fn_args)
+def render_stmt(tree, fn_names, lvar_names, fn_args)
   alines = []
 
   head, *rest = tree
   case head
   when "stmts"
     rest.each{|stmt|
-      alines += proc_stmt(stmt, fn_names, lvar_names, fn_args)
+      alines += render_stmt(stmt, fn_names, lvar_names, fn_args)
     }
   when "func"
     alines += render_func_def(rest, fn_names)
@@ -562,7 +562,7 @@ def main(args)
                  "call main",
                  "exit",
                ]
-  alines += proc_stmt(tree, fn_names, lvar_names, [])
+  alines += render_stmt(tree, fn_names, lvar_names, [])
 
   puts YAML.dump(alines)
 end
