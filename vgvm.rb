@@ -266,7 +266,7 @@ class Cpu
           when /^\[(.+)\]$/
             get_val($1)
           else
-            raise "not yet impl"
+            raise not_yet_impl(next_val)
           end
         @mem.stack[@sp - 1] = val_to_push
         set_sp(@sp - 1)
@@ -276,7 +276,7 @@ class Cpu
         when "bp"
           @bp = @mem.stack[@sp]
         else
-          raise "not yet impl"
+          raise not_yet_impl
         end
         set_sp(@sp + 1)
         @pc += 2
@@ -305,7 +305,7 @@ class Cpu
         when "sp"
           set_sp(@sp + arg2.to_i)
         else
-          raise "not yet impl"
+          raise not_yet_impl(arg1)
         end
         @pc += 3
       when "sub"
@@ -315,7 +315,7 @@ class Cpu
         when "sp"
           set_sp(@sp - arg2.to_i)
         else
-          raise "not yet impl"
+          raise not_yet_impl(arg1)
         end
         @pc += 3
       when "_debug"
@@ -348,7 +348,7 @@ class Cpu
       stack_addr = @bp - $1.to_i
       @mem.stack[stack_addr]
     else
-      raise "not yet impl (#{arg})"
+      raise not_yet_impl(arg)
     end
   end
 
@@ -367,7 +367,7 @@ class Cpu
       stack_addr = @bp - $1.to_i
       @mem.stack[stack_addr] = val
     else
-      raise "not yet impl"
+      raise not_yet_impl(dest)
     end
   end
 
@@ -399,7 +399,7 @@ class Cpu
       when /^(\d+)$/
         $1.to_i
       else
-        raise "not yet impl"
+        raise not_yet_impl(arg1)
       end
 
     case arg2

@@ -22,7 +22,7 @@ def pass1(tree)
   when "func"
     fn_names << rest[0]
   else
-    raise "not yet impl"
+    raise not_yet_impl(head)
   end
 
   fn_names
@@ -125,7 +125,7 @@ def proc_case(whens, fn_names, lvar_names, fn_args)
       then_stmts << "jump end_case_#{label_id}"
       when_bodies << then_stmts
     else
-      raise "not yet impl (#{cond_head})"
+      raise not_yet_impl(cond_head)
     end
   end
 
@@ -200,7 +200,7 @@ def proc_exp_two(left, right, lvar_names, fn_args)
       pos = fn_args.index(left) + 2
       alines << "set_reg_d [bp+#{pos}]"
     else
-      raise "not yet impl (#{left})"
+      raise not_yet_impl(left)
     end
   else
     raise not_yet_impl(left)
@@ -220,7 +220,7 @@ def proc_exp_two(left, right, lvar_names, fn_args)
       pos = fn_args.index(right) + 2
       alines << "set_reg_a [bp+#{pos}]"
     else
-      raise "not yet impl (#{right})"
+      raise not_yet_impl(right)
     end
   else
     alines << "set_reg_a #{right}"
@@ -544,7 +544,7 @@ def proc_stmt(tree, fn_names, lvar_names, fn_args)
   when "_debug"
     alines << _debug(rest[0])
   else
-    raise "not yet impl (#{tree.inspect})"
+    raise not_yet_impl(tree)
   end
 
   alines
