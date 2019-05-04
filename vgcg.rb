@@ -56,7 +56,7 @@ def render_func_def(rest, fn_names)
   alines
 end
 
-def call_func(fn_name, rest, lvar_names, fn_args)
+def render_func_call(fn_name, rest, lvar_names, fn_args)
   alines = []
 
   # 逆順に積む
@@ -522,7 +522,7 @@ def proc_stmt(tree, fn_names, lvar_names, fn_args)
     end
     fn_name, *tmp_fn_args = rest[1]
     alines << _debug("-->> call_set " + fn_name)
-    alines += call_func(fn_name, tmp_fn_args, lvar_names, fn_args)
+    alines += render_func_call(fn_name, tmp_fn_args, lvar_names, fn_args)
 
     # 返り値をセット
     lvar_pos = lvar_names.index(lvar_name) + 1
@@ -531,7 +531,7 @@ def proc_stmt(tree, fn_names, lvar_names, fn_args)
   when "call"
     fn_name, *tmp_fn_args = rest
     alines << _debug("-->> call " + fn_name)
-    alines += call_func(fn_name, tmp_fn_args, lvar_names, fn_args)
+    alines += render_func_call(fn_name, tmp_fn_args, lvar_names, fn_args)
     alines << _debug("<<-- call " + fn_name)
   when "case"
     alines << _debug("-->> case")
