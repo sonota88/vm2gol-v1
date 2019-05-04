@@ -150,7 +150,7 @@ class Cpu
   def start
     # 開始前状態
     dump
-    $stdin.gets
+    # $stdin.gets
 
     loop do
       @step += 1
