@@ -464,6 +464,38 @@ def render_set(rest, lvar_names, fn_args)
   alines
 end
 
+def render_return(rest, lvar_names)
+  alines = []
+
+  retval = rest[0]
+  case
+  when /^vram\[(.+)\]$/ =~ retval
+    idx = $1
+    case idx
+    when /^(\d+)$/
+      raise not_yet_impl(retval)
+    when /^([a-z_][a-z0-9_]+)$/
+      var_name = $1
+      case
+      when lvar_names.include?(var_name)
+        var_pos = lvar_names.index(var_name) + 1
+        alines << "get_vram [bp-#{var_pos}] reg_a"
+      else
+        raise not_yet_impl(var_name)
+      end
+    else
+      raise not_yet_impl(retval)
+    end
+  when lvar_names.include?(retval)
+    var_pos = lvar_names.index(retval) + 1
+    alines << "cp [bp-#{var_pos}] reg_a"
+  else
+    alines << "cp #{retval} reg_a"
+  end
+
+  alines
+end
+
 def _debug(msg)
   "_debug " + msg.gsub(" ", "_")
 end
@@ -497,31 +529,7 @@ def render_stmt(tree, fn_names, lvar_names, fn_args)
   when "neq"
     alines += render_exp(tree, lvar_names, fn_args)
   when "return"
-    retval = rest[0]
-    case
-    when /^vram\[(.+)\]$/ =~ retval
-      idx = $1
-      case idx
-      when /^(\d+)$/
-        raise not_yet_impl(retval)
-      when /^([a-z_][a-z0-9_]+)$/
-        var_name = $1
-        case
-        when lvar_names.include?(var_name)
-          var_pos = lvar_names.index(var_name) + 1
-          alines << "get_vram [bp-#{var_pos}] reg_a"
-        else
-          raise not_yet_impl(var_name)
-        end
-      else
-        raise not_yet_impl(retval)
-      end
-    when lvar_names.include?(retval)
-      var_pos = lvar_names.index(retval) + 1
-      alines << "cp [bp-#{var_pos}] reg_a"
-    else
-      alines << "cp #{retval} reg_a"
-    end
+    alines += render_return(rest, lvar_names)
   when "call_set"
     lvar_name = rest[0]
     unless rest[1].is_a? Array
