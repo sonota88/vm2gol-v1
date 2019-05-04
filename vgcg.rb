@@ -28,7 +28,7 @@ def pass1(tree)
   fn_names
 end
 
-def def_func(rest, fn_names)
+def render_func_def(rest, fn_names)
   fn_name = rest[0]
   fn_args = rest[1]
   body = rest[2]
@@ -414,7 +414,7 @@ def proc_stmt(tree, fn_names, lvar_names, fn_args)
       alines += proc_stmt(stmt, fn_names, lvar_names, fn_args)
     }
   when "func"
-    alines += def_func(rest, fn_names)
+    alines += render_func_def(rest, fn_names)
   when "noop"
     alines << "noop"
   when "var"
