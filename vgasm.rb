@@ -53,6 +53,4 @@ list.each do |line|
   end
 end
 
-$stderr.puts "size (#{ list2.size })"
-
 puts YAML.dump(list2)
