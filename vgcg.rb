@@ -552,10 +552,7 @@ end
 
 def main(args)
   src = File.read(args[0])
-  src2 = src.split("\n").select{|line|
-    %r{^ *//} !~ line
-  }.join("\n")
-  tree = JSON.parse(src2)
+  tree = JSON.parse(src)
 
   fn_names = pass1(tree)
   lvar_names = []
