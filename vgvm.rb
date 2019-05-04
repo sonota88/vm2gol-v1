@@ -507,8 +507,8 @@ class Computer
     @cpu = Cpu.new(mem, stack_size)
   end
 
-  def start(bin_file)
-    @cpu.load_program(bin_file)
+  def start(exe_file)
+    @cpu.load_program(exe_file)
     @cpu.start
   end
 
