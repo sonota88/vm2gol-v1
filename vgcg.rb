@@ -230,7 +230,7 @@ def render_exp_two(left, right, lvar_names, fn_args)
 end
 
 # 結果は reg_a に入れる
-def builtin_add(rest, lvar_names, fn_args)
+def render_builtin_add(rest, lvar_names, fn_args)
   left, right = rest
   alines = []
 
@@ -243,7 +243,7 @@ def builtin_add(rest, lvar_names, fn_args)
 end
 
 # 結果は reg_a に入れる
-def builtin_sub(rest, lvar_names, fn_args)
+def render_builtin_sub(rest, lvar_names, fn_args)
   left, right = rest
   alines = []
 
@@ -261,7 +261,7 @@ def builtin_sub(rest, lvar_names, fn_args)
 end
 
 # 結果は reg_a に入れる
-def builtin_mult(rest, lvar_names, fn_args)
+def render_builtin_mult(rest, lvar_names, fn_args)
   left, right = rest
   alines = []
 
@@ -274,7 +274,7 @@ def builtin_mult(rest, lvar_names, fn_args)
 end
 
 # 結果は reg_a に入れる
-def builtin_eq(rest, lvar_names, fn_args)
+def render_builtin_eq(rest, lvar_names, fn_args)
   left, right = rest
   alines = []
   $label_id +=1
@@ -300,7 +300,7 @@ end
 
 # 結果は reg_a に入れる
 # left > right の場合 true
-def builtin_gt(rest, lvar_names, fn_args)
+def render_builtin_gt(rest, lvar_names, fn_args)
   left, right = rest
   alines = []
   $label_id +=1
@@ -326,7 +326,7 @@ end
 
 # 結果は reg_a に入れる
 # left < right の場合 true
-def builtin_lt(rest, lvar_names, fn_args)
+def render_builtin_lt(rest, lvar_names, fn_args)
   left, right = rest
   alines = []
   $label_id +=1
@@ -350,7 +350,7 @@ def builtin_lt(rest, lvar_names, fn_args)
   alines
 end
 
-def builtin_neq(rest, lvar_names, fn_args)
+def render_builtin_neq(rest, lvar_names, fn_args)
   left, right = rest
   alines = []
   $label_id +=1
@@ -380,19 +380,19 @@ def render_exp(exp, lvar_names, fn_args)
 
   case head
   when "+"
-    alines += builtin_add(rest, lvar_names, fn_args)
+    alines += render_builtin_add(rest, lvar_names, fn_args)
   when "-"
-    alines += builtin_sub(rest, lvar_names, fn_args)
+    alines += render_builtin_sub(rest, lvar_names, fn_args)
   when "*"
-    alines += builtin_mult(rest, lvar_names, fn_args)
+    alines += render_builtin_mult(rest, lvar_names, fn_args)
   when "eq"
-    alines += builtin_eq(rest, lvar_names, fn_args)
+    alines += render_builtin_eq(rest, lvar_names, fn_args)
   when "gt"
-    alines += builtin_gt(rest, lvar_names, fn_args)
+    alines += render_builtin_gt(rest, lvar_names, fn_args)
   when "lt"
-    alines += builtin_lt(rest, lvar_names, fn_args)
+    alines += render_builtin_lt(rest, lvar_names, fn_args)
   when "neq"
-    alines += builtin_neq(rest, lvar_names, fn_args)
+    alines += render_builtin_neq(rest, lvar_names, fn_args)
   else
     raise not_yet_impl(head)
   end
@@ -480,9 +480,9 @@ def render_stmt(tree, fn_names, lvar_names, fn_args)
       alines << "cp #{src_val} [bp-#{var_pos}]"
     end
   when "+"
-    alines += builtin_add(rest, lvar_names)
+    alines += render_builtin_add(rest, lvar_names)
   when "*"
-    alines += builtin_mult(rest, lvar_names)
+    alines += render_builtin_mult(rest, lvar_names)
   when "eq"
     alines += render_exp(tree, lvar_names, fn_args)
   when "gt", "lt"
