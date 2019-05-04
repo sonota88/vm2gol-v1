@@ -24,7 +24,7 @@ class Memory
     @vram = Array.new(50, 0)
   end
 
-  def dump_main(ip)
+  def dump_main(pc)
     lines = []
 
     i = 0
@@ -47,13 +47,13 @@ class Memory
     end
 
     lines.select{|cmd|
-      (ip - MAIN_DUMP_WIDTH) <= cmd[:i] &&
-        cmd[:i] <= (ip + MAIN_DUMP_WIDTH)
+      (pc - MAIN_DUMP_WIDTH) <= cmd[:i] &&
+        cmd[:i] <= (pc + MAIN_DUMP_WIDTH)
     }.map{|cmd|
       head =
         case cmd[:i]
-        when ip
-          "#{Escseq::INVERT}ip =>"
+        when pc
+          "#{Escseq::INVERT}pc =>"
         else
           "     "
         end
@@ -429,7 +429,7 @@ class Cpu
     puts <<-EOB
 ================================
 #{@step}: #{dump_reg()} zf(#{@zf}) of(#{@of})
----- memory ---- ip(#{@pc})
+---- memory ---- pc(#{@pc})
 #{ @mem.dump_main(@pc) }
 ---- memory (stack) ---- sp(#{@sp}) bp(#{@bp})
 #{ @mem.dump_stack(@sp, @bp) }
