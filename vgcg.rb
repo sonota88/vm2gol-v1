@@ -277,7 +277,7 @@ end
 def render_builtin_eq(rest, lvar_names, fn_args)
   left, right = rest
   alines = []
-  $label_id +=1
+  $label_id += 1
   label_id = $label_id
 
   alines += render_exp_two(left, right, lvar_names, fn_args)
@@ -303,7 +303,7 @@ end
 def render_builtin_gt(rest, lvar_names, fn_args)
   left, right = rest
   alines = []
-  $label_id +=1
+  $label_id += 1
   label_id = $label_id
 
   alines += render_exp_two(left, right, lvar_names, fn_args)
@@ -329,7 +329,7 @@ end
 def render_builtin_lt(rest, lvar_names, fn_args)
   left, right = rest
   alines = []
-  $label_id +=1
+  $label_id += 1
   label_id = $label_id
 
   alines += render_exp_two(left, right, lvar_names, fn_args)
@@ -574,9 +574,9 @@ def main(args)
 
   alines = []
   alines += [
-                 "call main",
-                 "exit",
-               ]
+    "call main",
+    "exit",
+  ]
   alines += render_stmt(tree, fn_names, lvar_names, [])
 
   puts YAML.dump(alines)
