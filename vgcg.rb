@@ -400,6 +400,70 @@ def render_exp(exp, lvar_names, fn_args)
   alines
 end
 
+# ローカル変数への代入
+def render_set(rest, lvar_names, fn_args)
+  alines = []
+
+  src_val =
+    if rest[1].is_a? Integer
+      rest[1]
+    elsif rest[1].is_a? Array
+      exp = rest[1]
+      alines += render_exp(exp, lvar_names, fn_args)
+      "reg_a" # 結果を reg_a から回収する
+    elsif fn_args.include?(rest[1])
+      # pos = 0 ... 1個目の引数
+      # [bp+(pos+2)] にしたい
+      pos = fn_args.index(rest[1])
+      "[bp+#{ pos + 2 }]"
+    elsif lvar_names.include?(rest[1])
+      pos = lvar_names.index(rest[1]) + 1
+      "[bp-#{pos}]"
+    elsif rest[1] == "reg_a"
+      "reg_a"
+    elsif /^vram\[(\d+)\]$/ =~ rest[1]
+      rest[1]
+    elsif /^vram\[([a-z_][a-z0-9_]*)\]$/ =~ rest[1]
+      var_name = $1
+      case
+      when lvar_names.include?(var_name)
+        var_pos = lvar_names.index(var_name) + 1
+        alines << "get_vram [bp-#{var_pos}] reg_a"
+      else
+        raise not_yet_impl(var_name)
+      end
+      "reg_a"
+    else
+      raise not_yet_impl(tree)
+    end
+
+  var_name = rest[0]
+  case var_name
+  when /^vram\[(.+)\]$/
+    idx = $1
+    case idx
+    when /^\d+$/
+      alines << "cp #{src_val} #{var_name}"
+    when /^([a-z_][a-z0-9_]*)$/
+      var_name = $1
+      case
+      when lvar_names.include?(var_name)
+        var_pos = lvar_names.index(var_name) + 1
+        alines << "set_vram [bp-#{var_pos}] #{src_val}"
+      else
+        raise not_yet_impl(var_name)
+      end
+    else
+      raise not_yet_impl(var_name)
+    end
+  else
+    var_pos = lvar_names.index(var_name) + 1
+    alines << "cp #{src_val} [bp-#{var_pos}]"
+  end
+
+  alines
+end
+
 def _debug(msg)
   "_debug " + msg.gsub(" ", "_")
 end
@@ -421,64 +485,7 @@ def render_stmt(tree, fn_names, lvar_names, fn_args)
     # ローカル変数の宣言（スタック確保）
     alines << "sub sp 1"
   when "set" # dest src
-    # ローカル変数への代入
-
-    src_val =
-      if rest[1].is_a? Integer
-        rest[1]
-      elsif rest[1].is_a? Array
-        exp = rest[1]
-        alines += render_exp(exp, lvar_names, fn_args)
-        "reg_a" # 結果を reg_a から回収する
-      elsif fn_args.include?(rest[1])
-        # pos = 0 ... 1個目の引数
-        # [bp+(pos+2)] にしたい
-        pos = fn_args.index(rest[1])
-        "[bp+#{ pos + 2 }]"
-      elsif lvar_names.include?(rest[1])
-        pos = lvar_names.index(rest[1]) + 1
-        "[bp-#{pos}]"
-      elsif rest[1] == "reg_a"
-        "reg_a"
-      elsif /^vram\[(\d+)\]$/ =~ rest[1]
-        rest[1]
-      elsif /^vram\[([a-z_][a-z0-9_]*)\]$/ =~ rest[1]
-        var_name = $1
-        case
-        when lvar_names.include?(var_name)
-          var_pos = lvar_names.index(var_name) + 1
-          alines << "get_vram [bp-#{var_pos}] reg_a"
-        else
-          raise not_yet_impl(var_name)
-        end
-        "reg_a"
-      else
-        raise not_yet_impl(tree)
-      end
-
-    var_name = rest[0]
-    case var_name
-    when /^vram\[(.+)\]$/
-      idx = $1
-      case idx
-      when /^\d+$/
-        alines << "cp #{src_val} #{var_name}"
-      when /^([a-z_][a-z0-9_]*)$/
-        var_name = $1
-        case
-        when lvar_names.include?(var_name)
-          var_pos = lvar_names.index(var_name) + 1
-          alines << "set_vram [bp-#{var_pos}] #{src_val}"
-        else
-          raise not_yet_impl(var_name)
-        end
-      else
-        raise not_yet_impl(var_name)
-      end
-    else
-      var_pos = lvar_names.index(var_name) + 1
-      alines << "cp #{src_val} [bp-#{var_pos}]"
-    end
+    alines += render_set(rest, lvar_names, fn_args)
   when "+"
     alines += render_builtin_add(rest, lvar_names)
   when "*"
