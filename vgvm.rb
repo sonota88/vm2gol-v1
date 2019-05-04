@@ -120,7 +120,7 @@ class Cpu
   def initialize(mem, stack_size)
     @mem = mem
 
-    @ip = 0
+    @pc = 0
 
     # registers
     @reg_a = 0
@@ -154,35 +154,35 @@ class Cpu
 
     loop do
       @step += 1
-      op = @mem.main[@ip]
+      op = @mem.main[@pc]
       case op
       when "noop"
-        @ip += 1
+        @pc += 1
       when "set_reg_a"
-        arg = @mem.main[@ip + 1]
+        arg = @mem.main[@pc + 1]
         n = if arg.is_a? Integer
               arg
             else
               mem_get_val(arg)
             end
         set_reg_a(n)
-        @ip += 2
+        @pc += 2
       when "set_reg_b"
-        n = @mem.main[@ip + 1]
+        n = @mem.main[@pc + 1]
         set_reg_b(n)
-        @ip += 2
+        @pc += 2
       when "set_reg_d"
-        arg = @mem.main[@ip + 1]
+        arg = @mem.main[@pc + 1]
         n = if arg.is_a? Fixnum
               arg
             else
               mem_get_val(arg)
             end
         set_reg_d(n)
-        @ip += 2
+        @pc += 2
       when "set_vram"
-        arg1 = @mem.main[@ip + 1]
-        arg2 = @mem.main[@ip + 2]
+        arg1 = @mem.main[@pc + 1]
+        arg2 = @mem.main[@pc + 2]
 
         n1 = if arg1.is_a? Integer
                arg1
@@ -197,10 +197,10 @@ class Cpu
 
         @mem.vram[n1] = n2
 
-        @ip += 3
+        @pc += 3
       when "get_vram" # ai, dest
-        arg1 = @mem.main[@ip + 1]
-        arg2 = @mem.main[@ip + 2]
+        arg1 = @mem.main[@pc + 1]
+        arg2 = @mem.main[@pc + 2]
 
         ai = if arg1.is_a? Integer
                arg1
@@ -216,23 +216,23 @@ class Cpu
           not_yet_impl(arg2)
         end
         
-        @ip += 3
+        @pc += 3
       when "label"
-        @ip += 2
+        @pc += 2
       when "jump"
-        addr = @mem.main[@ip + 1]
-        @ip = addr
+        addr = @mem.main[@pc + 1]
+        @pc = addr
       when "compare_v2"
         compare_v2()
-        @ip += 1
+        @pc += 1
       when "jump_eq"
-        addr = @mem.main[@ip + 1]
+        addr = @mem.main[@pc + 1]
         jump_eq(addr)
       when "jump_above"
-        addr = @mem.main[@ip + 1]
+        addr = @mem.main[@pc + 1]
         jump_above(addr)
       when "jump_below"
-        addr = @mem.main[@ip + 1]
+        addr = @mem.main[@pc + 1]
         jump_below(addr)
       when "exit"
         puts "exit"
@@ -242,19 +242,19 @@ class Cpu
         # sp を1減らす
         set_sp(@sp - 1)
         # 次の命令のアドレスをスタックに積む
-        next_of_call = @ip + 2
-        @mem.stack[ @sp ] = @ip + 2
+        next_of_call = @pc + 2
+        @mem.stack[ @sp ] = @pc + 2
         # call 先にジャンプ
-        @ip = @mem.main[ @ip + 1 ]
+        @pc = @mem.main[ @pc + 1 ]
       when "ret"
         # 戻りアドレス取得
         ret_addr = @mem.stack[ @sp ]
         # 戻る
-        @ip = ret_addr
+        @pc = ret_addr
         # スタックを pop
         set_sp(@sp + 1)
       when "push"
-        next_val = @mem.main[@ip + 1]
+        next_val = @mem.main[@pc + 1]
         val_to_push =
           case next_val
           when Integer
@@ -270,56 +270,56 @@ class Cpu
           end
         @mem.stack[@sp - 1] = val_to_push
         set_sp(@sp - 1)
-        @ip += 2
+        @pc += 2
       when "pop"
-        case @mem.main[@ip + 1]
+        case @mem.main[@pc + 1]
         when "bp"
           @bp = @mem.stack[@sp]
         else
           raise "not yet impl"
         end
         set_sp(@sp + 1)
-        @ip += 2
+        @pc += 2
       when "cp"
         copy
-        @ip += 3
+        @pc += 3
       when "add_ab_v2"
         assert_num(@reg_a)
         assert_num(@reg_b)
         @reg_a = @reg_a.to_i + @reg_b.to_i
-        @ip += 1
+        @pc += 1
       when "sub_ab"
         assert_num(@reg_a)
         assert_num(@reg_b)
         @reg_a = @reg_a.to_i - @reg_b.to_i
-        @ip += 1
+        @pc += 1
       when "mult_ab"
         assert_num(@reg_a)
         assert_num(@reg_b)
         @reg_a = @reg_a.to_i * @reg_b.to_i
-        @ip += 1
+        @pc += 1
       when "add"
-        arg1 = @mem.main[@ip + 1]
-        arg2 = @mem.main[@ip + 2]
+        arg1 = @mem.main[@pc + 1]
+        arg2 = @mem.main[@pc + 2]
         case arg1
         when "sp"
           set_sp(@sp + arg2.to_i)
         else
           raise "not yet impl"
         end
-        @ip += 3
+        @pc += 3
       when "sub"
-        arg1 = @mem.main[@ip + 1]
-        arg2 = @mem.main[@ip + 2]
+        arg1 = @mem.main[@pc + 1]
+        arg2 = @mem.main[@pc + 2]
         case arg1
         when "sp"
           set_sp(@sp - arg2.to_i)
         else
           raise "not yet impl"
         end
-        @ip += 3
+        @pc += 3
       when "_debug"
-        @ip += 2
+        @pc += 2
       else
         raise "unknown operator (#{op})"
       end
@@ -372,8 +372,8 @@ class Cpu
   end
 
   def copy
-    arg1 = @mem.main[@ip+1]
-    arg2 = @mem.main[@ip+2]
+    arg1 = @mem.main[@pc+1]
+    arg2 = @mem.main[@pc+2]
 
     src_val =
       case arg1
@@ -429,8 +429,8 @@ class Cpu
     puts <<-EOB
 ================================
 #{@step}: #{dump_reg()} zf(#{@zf}) of(#{@of})
----- memory ---- ip(#{@ip})
-#{ @mem.dump_main(@ip) }
+---- memory ---- ip(#{@pc})
+#{ @mem.dump_main(@pc) }
 ---- memory (stack) ---- sp(#{@sp}) bp(#{@bp})
 #{ @mem.dump_stack(@sp, @bp) }
 ---- memory (vram) ----
@@ -475,25 +475,25 @@ class Cpu
 
   def jump_eq(addr)
     if @zf == 1
-      @ip = addr
+      @pc = addr
     else
-      @ip += 2
+      @pc += 2
     end
   end
 
   def jump_above(addr)
     if @cf == 0 && @zf == 0
-      @ip = addr
+      @pc = addr
     else
-      @ip += 2
+      @pc += 2
     end
   end
 
   def jump_below(addr)
     if @cf == 1
-      @ip = addr
+      @pc = addr
     else
-      @ip += 2
+      @pc += 2
     end
   end
 
