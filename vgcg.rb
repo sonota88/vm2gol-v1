@@ -169,7 +169,7 @@ def render_while(rest, fn_names, lvar_names, fn_args)
 end
 
 # 2引数の式を展開
-def proc_exp_two(left, right, lvar_names, fn_args)
+def render_exp_two(left, right, lvar_names, fn_args)
   alines = []
 
   # 終端でなければ、先に深い方を処理する
@@ -234,7 +234,7 @@ def builtin_add(rest, lvar_names, fn_args)
   left, right = rest
   alines = []
 
-  alines += proc_exp_two(left, right, lvar_names, fn_args)
+  alines += render_exp_two(left, right, lvar_names, fn_args)
 
   alines << "cp reg_d reg_b"
   alines << "add_ab_v2" #=> reg_a に入る
@@ -247,7 +247,7 @@ def builtin_sub(rest, lvar_names, fn_args)
   left, right = rest
   alines = []
 
-  alines += proc_exp_two(left, right, lvar_names, fn_args)
+  alines += render_exp_two(left, right, lvar_names, fn_args)
 
   # きれいではないが a - b となるように入れ替え
   # 加算のときは順番関係ないので問題に気づけてなかった…
@@ -265,7 +265,7 @@ def builtin_mult(rest, lvar_names, fn_args)
   left, right = rest
   alines = []
 
-  alines += proc_exp_two(left, right, lvar_names, fn_args)
+  alines += render_exp_two(left, right, lvar_names, fn_args)
 
   alines << "cp reg_d reg_b"
   alines << "mult_ab"
@@ -280,7 +280,7 @@ def builtin_eq(rest, lvar_names, fn_args)
   $label_id +=1
   label_id = $label_id
 
-  alines += proc_exp_two(left, right, lvar_names, fn_args)
+  alines += render_exp_two(left, right, lvar_names, fn_args)
 
   alines << "cp reg_d reg_b"
   alines << "compare_v2"
@@ -306,7 +306,7 @@ def builtin_gt(rest, lvar_names, fn_args)
   $label_id +=1
   label_id = $label_id
 
-  alines += proc_exp_two(left, right, lvar_names, fn_args)
+  alines += render_exp_two(left, right, lvar_names, fn_args)
 
   alines << "cp reg_d reg_b"
   alines << "compare_v2"
@@ -332,7 +332,7 @@ def builtin_lt(rest, lvar_names, fn_args)
   $label_id +=1
   label_id = $label_id
 
-  alines += proc_exp_two(left, right, lvar_names, fn_args)
+  alines += render_exp_two(left, right, lvar_names, fn_args)
 
   alines << "cp reg_d reg_b"
   alines << "compare_v2"
@@ -356,7 +356,7 @@ def builtin_neq(rest, lvar_names, fn_args)
   $label_id +=1
   label_id = $label_id
 
-  alines += proc_exp_two(left, right, lvar_names, fn_args)
+  alines += render_exp_two(left, right, lvar_names, fn_args)
 
   alines << "cp reg_d reg_b"
   alines << "compare_v2"
